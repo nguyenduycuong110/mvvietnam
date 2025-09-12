@@ -89,6 +89,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('lien-he.html', [FeContactController::class, 'index'])->name('contact.index');
 Route::post('contact/save', [FeContactController::class, 'saveContact'])->name('contact.save');
 
+Route::get('giao-vien'.config('apps.general.suffix'), [FeLecturerController::class, 'allLecturer'])->name('lecturer.allLecturer');
 
 Route::post('ajax/contact/saveContact', [FeContactController::class, 'save'])->name('ajax.contact.save');
 
@@ -146,8 +147,8 @@ Route::get('cart/success'.config('apps.general.suffix'), [CartController::class,
 
 Route::get('giao-vien/{canonical}'.config('apps.general.suffix'), [FeLecturerController::class, 'index'])->name('lecturer.index');
 
-/* FRONTEND SYSTEM */
 
+/* FRONTEND SYSTEM */
 
 Route::get('ajax/post/video', [AjaxPostController::class, 'video'])->name('post.video');
 

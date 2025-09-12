@@ -67,7 +67,7 @@
                     <div class="uk-flex uk-flex-middle uk-flex-space-between">
                         <a href="{{ write_url('gio-hang') }}" title="" class="toolbox-item cart wow fadeInUp" data-wow-delay="0.35s">
                             <img src="/frontend/resources/img/cart.svg" alt="">
-                            <span class="count">0</span>
+                            <span class="count">{{ $cartShare['cartTotalItems'] }}</span>
                         </a>
                         @if(isset($customerAuth) && !is_null($customerAuth))
                             <a href="{{ route('buyer.profile') }}" title="" class="toolbox-item register profile wow fadeInUp" data-wow-delay="0.45s">

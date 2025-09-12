@@ -11,7 +11,7 @@
                         <span class="slash">/</span>
                     </li>
                     <li>
-                        <a href="">Giáo viên</a>
+                        <a href="{{ write_url('giao-vien') }}">Giáo viên</a>
                     </li>
                     <li>
                         <span class="slash">/</span>

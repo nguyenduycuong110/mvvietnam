@@ -2,16 +2,15 @@
     $slideKeyword = App\Enums\SlideEnum::MAIN;
 @endphp
 @if(count($slides[$slideKeyword]['item']))
-    <div class="panel-slide page-setup" data-setting="">
+    <div class="panel-slide page-setup">
         <div class="swiper-button-prev">
             <img src="/frontend/resources/img/prev.svg" alt="">
         </div>
         <div class="swiper-button-next">
-            <img src="/frontend/resources/img/next.svg" alt="">
+            <img src="/userfiles/image/next.png" alt="">
         </div>
         <div class="uk-container uk-container-center">
             <div class="swiper-container">
-                
                 <div class="swiper-wrapper">
                     @foreach($slides[$slideKeyword]['item'] as $key => $val )
                         <div class="swiper-slide">
@@ -30,7 +29,7 @@
                                                         <span>Xem khóa học</span>
                                                     </a>
                                                     <a href="#panel-contact" title="" class="btn btn-register wow tada" data-wow-delay="1s">
-                                                        <span>Đăng ký nhận tư vấn miễn phí</span>
+                                                        <span>Nhận tư vấn miễn phí</span>
                                                     </a>
                                                 </div>
                                             </div>

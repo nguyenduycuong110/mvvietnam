@@ -96,6 +96,7 @@
                     success: function(res) {
                     toastr.clear()
                         if(res.code === 10){
+                            $('.cart .count').text(res.cartCaculate.cartTotalItems)
                             toastr.success(res.messages, 'Thông báo từ hệ thống!')
                             if(redirect == 1){
                                 window.location.href = 'gio-hang.html'

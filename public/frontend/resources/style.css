@@ -928,6 +928,8 @@ input[name="captcha"]{
     font-weight: 700;
     color: rgba(255, 255, 255, 1);
     letter-spacing: 1px;
+    text-transform: uppercase;
+    width: 70%;
 }
 .panel-contact h3.heading-2 span{
     color: rgba(254, 200, 40, 1);
@@ -1130,8 +1132,8 @@ input[name="captcha"]{
 .panel-tech-staff h3.heading-2{
     margin-bottom: 15px;
 }
-.panel-tech-staff .panel-head{
-    margin-bottom: 40px;
+.panel-tech-staff .panel-body .swiper-container{
+    padding-top: 80px;
 }
 .panel-tech-staff .slide-item{
     background: rgba(255, 255, 255, 1);
@@ -1164,8 +1166,22 @@ input[name="captcha"]{
     object-fit: cover;
 }
 .panel-tech-staff .swiper-container{
-    padding-bottom: 95px;
     position: relative;
+}
+.panel-tech-staff .btn{
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+.panel-tech-staff .btn > *{
+    width: 163px;
+    height: 37px;
+    background: rgba(254, 200, 40, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-weight: 400;
 }
 .swiper-button-next,
 .swiper-button-prev{
@@ -2902,6 +2918,10 @@ button{
     background: rgba(244, 249, 244, 1);
     color: rgba(255, 205, 41, 1);
 }
+.popup-product .preview-video{
+    background: #F4F9F4;
+    color: #FFCD29;
+}
 .video.image{
     height: 366px;
     border-radius: 10px;
@@ -4390,4 +4410,66 @@ button{
 .qr-code img{
     width: 250px;
     height: auto;
+}
+.swiper-button-next svg,
+.swiper-button-prev svg{
+    display: none;
+}
+.swiper-button-next::before {
+    content: '→';
+    font-size: 24px;
+}
+.swiper-button-next::before {
+    content: '→';
+    font-size: 22px;
+    color: #000;
+}
+.swiper-button-prev::before {
+    content: '←';
+    font-size: 22px;
+    color: #000;
+}
+.swiper-button-next:hover::before,
+.swiper-button-prev:hover::before {
+    color: #fff !important;
+}
+.panel-tech-staff .swiper-button-next, 
+.panel-tech-staff .swiper-button-prev{
+    top: 7%;
+}
+.lecturer-item{
+    box-shadow: rgba(74, 48, 109, 0.05) 0px 4px 20px;
+    border-radius: 12px;
+}
+.lecturer-item .image,
+.lecturer-item img{
+    height: 230px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+} 
+.lecturer-item .text-content{
+    padding: 16px;
+    text-align: center;
+}
+.lecturer-item h3.heading-2{
+    height: 40px;
+    overflow: hidden;
+}
+.lecturer-item p{
+    color: rgb(107 114 128);
+}
+.lecturer-item .courses .uk-flex{
+    justify-content: center;
+    gap: 5px;
+}
+.lecturer-item .courses svg{
+    width: 12px;
+    color: #9ca3af;
+}
+.lecturer-item .courses span{
+    color: #9ca3af;
+}
+.lecturer-item .text-content a:hover{
+    color: var(--primary-color);
+    transition: 0.5s ease all;
 }

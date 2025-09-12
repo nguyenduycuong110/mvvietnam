@@ -67,6 +67,42 @@ class LecturerController extends FrontendController
         ));
     }
 
+    public function allLecturer(){
+
+        $allLecturers = $this->lecturerRepository->all()->toArray();
+
+        if(!empty($allLecturers)){
+            foreach($allLecturers as $k => $lecturer){
+                $allLecturers[$k]['courses'] = $this->productRepository->findByCondition([
+                    ['lecturer_id','=', $lecturer['id']]
+                ], true)->count();
+            }
+        }
+
+        $config = $this->config();
+
+        $system = $this->system;
+
+        $seo = [
+            'meta_title' => $this->system['seo_meta_title'],
+            'meta_keyword' => $this->system['seo_meta_keyword'],
+            'meta_description' => $this->system['seo_meta_description'],
+            'meta_image' => $this->system['seo_meta_images'],
+            'canonical' => config('app.url'),
+        ];
+
+        $language = $this->language;
+
+        $template = 'frontend.lecturer.list';
+
+        return view($template, compact(
+            'config',
+            'seo',
+            'system',
+            'language',
+            'allLecturers'
+        ));
+    }
 
     private function config()
     {

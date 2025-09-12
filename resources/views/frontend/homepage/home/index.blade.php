@@ -175,7 +175,7 @@
                     </div>
                     <div class="uk-width-medium-1-3">
                         <div class="right-section wow fadeInUp" data-wow-delay="0.3s">
-                            <h4 class="heading-3"><span>Đăng ký</span></h4>
+                            <h4 class="heading-3"><span>Nhận ưu đãi</span></h4>
                             <form action="" method="POST" class="register-form">
                                 <div class="form-group">
                                     <label class="form-label" for="email">Email</label>
@@ -253,6 +253,9 @@
                             </div>
                             <div class="swiper-button-next wow fadeInUp" data-wow-delay="0.2s">
                                 <img src="/frontend/resources/img/next.svg" alt="">
+                            </div>
+                            <div class="btn">
+                                <a href="{{ write_url('giao-vien') }}" class="btn-view">Xem tất cả giáo viên</a>
                             </div>
                         </div>
                     </div>
