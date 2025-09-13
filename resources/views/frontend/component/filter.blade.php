@@ -90,7 +90,7 @@
                                 @endphp
                                     <li class="filter-list__item">
                                     <div class="uk-flex uk-flex-middle">
-                                        <input id="lecture-{{ $item->id }}" {{ ($lecturer->id === $item->id) ? 'checked' : '' }} type="checkbox" class="input-value p-filter" name="lecture_id[]" value="{{ $item->id }}">
+                                        <input id="lecture-{{ $item->id }}" {{ (isset($lecturer) && $lecturer->id === $item->id) ? 'checked' : '' }} type="checkbox" class="input-value p-filter" name="lecture_id[]" value="{{ $item->id }}">
                                         <label for="lecture-{{ $item->id }}">
                                             <i class="fa"></i>
                                             {{ $name }}
