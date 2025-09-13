@@ -7,20 +7,28 @@ use App\Repositories\Interfaces\SystemRepositoryInterface as SystemRepository;
 use App\Repositories\Interfaces\LecturerRepositoryInterface as LecturerRepository;
 use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
 use Illuminate\Http\Request;
+use App\Services\Interfaces\ProductServiceInterface as ProductService;
+use App\Services\Interfaces\ProductCatalogueServiceInterface as ProductCatalogueService;
 
 class LecturerController extends FrontendController
 {
     protected $language;
     protected $systemRepository;
+    protected $productService;
+    protected $productCatalogueService;
 
     public function __construct(
         SystemRepository $systemRepository,
         LecturerRepository $lecturerRepository,
         ProductRepository $productRepository,
+        ProductService $productService,
+        ProductCatalogueService $productCatalogueService,
     ) {
         $this->systemRepository = $systemRepository;
         $this->lecturerRepository = $lecturerRepository;
         $this->productRepository = $productRepository;
+        $this->productService = $productService;
+        $this->productCatalogueService = $productCatalogueService;
 
         parent::__construct(
             $systemRepository,
@@ -29,16 +37,18 @@ class LecturerController extends FrontendController
 
     public function index(string $canonical = '', Request $request)
     {
-        
         $lecturer = $this->lecturerRepository->findByCondition([
             ['canonical','=', $canonical]
         ]);
 
-        $allLecturers = $this->lecturerRepository->all();
+        $allLecturers = $lecturers = $this->lecturerRepository->all();
 
         $products = $this->productRepository->findByCondition([
             ['lecturer_id','=', $lecturer->id]
         ], true);
+
+        $descendantTrees = null;
+        $descendantTrees = $this->productCatalogueService->getChildren();
 
         $config = $this->config();
 
@@ -63,7 +73,9 @@ class LecturerController extends FrontendController
             'language',
             'lecturer',
             'products',
-            'allLecturers'
+            'allLecturers',
+            'descendantTrees',
+            'lecturers'
         ));
     }
 

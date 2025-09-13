@@ -21,8 +21,9 @@
             </div>
             <div class="uk-grid uk-grid-large">
                 <div class="uk-width-large-1-4">
+                    @include('frontend.component.filter', ['hiddenLecture' => true])
                     @if($allLecturers)
-                        <div class="bucket mb20">
+                        <div class="bucket mb20 mt20">
                             <div class="filter-item">
                                 <div class="filter-item__title filters-title" style="padding-top: 12px;">
                                     <h3 class="heading-2"><span>Giảng viên</span></h3>
@@ -60,19 +61,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="list-courses">
+                    <div class="list-courses product-catalogue">
                         <h2 class="heading-1 mb30">
                             <span>Danh sách khóa học của {{ $lecturer->name }}</span>
                         </h2>
-                        @if(!empty($products))
-                            <div class="uk-grid uk-grid-medium">
-                                @foreach ($products as $product)
-                                    <div class="uk-width-1-1 uk-width-small-1-1 uk-width-medium-1-2 uk-width-large-1-3 mb25">
-                                        @include('frontend.component.p-item', ['product' => $product])
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
+                        <div class="product-list">
+                             @if(!empty($products))
+                                <div class="uk-grid uk-grid-medium">
+                                    @foreach ($products as $product)
+                                        <div class="uk-width-1-1 uk-width-small-1-1 uk-width-medium-1-2 uk-width-large-1-3 mb25">
+                                            @include('frontend.component.p-item', ['product' => $product])
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
