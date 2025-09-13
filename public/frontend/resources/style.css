@@ -929,7 +929,7 @@ input[name="captcha"]{
     color: rgba(255, 255, 255, 1);
     letter-spacing: 1px;
     text-transform: uppercase;
-    width: 70%;
+    width: 100%;
 }
 .panel-contact h3.heading-2 span{
     color: rgba(254, 200, 40, 1);
