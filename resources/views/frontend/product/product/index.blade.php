@@ -9,8 +9,13 @@
     $attributeCatalogue = $product->attributeCatalogue;
     $gallery = json_decode($product->album);
     $iframe = $product->iframe;
-    $total_lesson = $product->total_lesson;
+    // $total_lesson = $product->total_lesson;
     $lessionContent = !is_null($product->lession_content) ? explode(',', $product->lession_content) : null;
+    // dd($product->chapter);
+    $total_time = !is_null($product->chapter) ? calculateCourses($product)['durationText'] : '';
+    $totalLessons = collect($product->chapter)
+    ->flatMap(fn ($chapter) => $chapter['content'] ?? [])
+    ->count();
 @endphp
 @extends('frontend.homepage.layout')
 @section('content')
@@ -137,15 +142,18 @@
                             </div>
                             <div class="course-content">
                                 <div class="title">Khóa học bao gồm:</div>
-                                @if(!is_null($lessionContent) && is_array($lessionContent) && count($lessionContent))
-                                    <ul class="uk-list uk-clearfix">
-                                        @foreach($lessionContent as $key => $val)
-                                            <li><span>{{ $val }}</span></li>
-                                        @endforeach
-                                    </ul>
-                                @else
                                     <ul class="uk-list uk-clearfix">
                                         <li><span>Chứng chỉ hoàn thành</span></li>
+                                        <li><span>{{ $total_time }} giờ video HD</span></li>
+                                        <li><span>{{ $totalLessons }} bài giảng chi tiết</span></li>
+                                        @if(!is_null($lessionContent) && is_array($lessionContent) && count($lessionContent))
+                                            @foreach($lessionContent as $key => $val)
+                                                <li><span>{{ $val }}</span></li>
+                                            @endforeach
+                                        @else
+                                    </ul>
+                                    <ul class="uk-list uk-clearfix">
+                                        
                                     </ul>
                                 @endif
                             </div>
