@@ -143,9 +143,9 @@
                             <div class="course-content">
                                 <div class="title">Khóa học bao gồm:</div>
                                     <ul class="uk-list uk-clearfix">
-                                        <li><span>Chứng chỉ hoàn thành</span></li>
-                                        <li><span>{{ $total_time }} giờ video HD</span></li>
-                                        <li><span>{{ $totalLessons }} bài giảng chi tiết</span></li>
+                                        <li><span>Thời gian: {{ $total_time }}</span></li>
+                                        <li><span>Số bài học: {{ $totalLessons }} Bài Giảng</span></li>
+                                        <li><span>Cấp chứng nhận hoàn thành</span></li>
                                         @if(!is_null($lessionContent) && is_array($lessionContent) && count($lessionContent))
                                             @foreach($lessionContent as $key => $val)
                                                 <li><span>{{ $val }}</span></li>
