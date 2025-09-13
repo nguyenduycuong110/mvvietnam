@@ -65,7 +65,7 @@
                                                             <div class="chapter-description">{{ $chapterName[1] ?? '-' }}</div>
                                                         </div>
                                                         <div class="chapter-action">
-                                                            <span class="unlock">Mở khóa</span>
+                                                            <span class="unlock">Xem chi tiết</span>
                                                         </div>
                                                     </div>
                                                 </div>
