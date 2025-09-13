@@ -55,7 +55,7 @@
                                             @if(!is_null($product->chapter) && count($product->chapter) && is_array($product->chapter) )
                                             @foreach($product->chapter as $key => $chapter)
                                             @php
-                                                $chapterName = explode(',', $chapter['title']);)
+                                                $chapterName = explode(',', $chapter['title']);
                                             @endphp
                                             <div class="chapter uk-accordion-title">
                                                 <div class="chapter-item">
