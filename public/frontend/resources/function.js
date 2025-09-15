@@ -1035,7 +1035,15 @@
     }
         
 
+    HT.forgotPassword = () => {
+        $('.forgot-password-form form').on('submit', function() {
+            const btn = $(this).find('button[type=submit]');
+            btn.attr('disabled', true).text('Hãy chờ trong giây lát....');
+        });
+    };
+
 	$(document).ready(function(){
+        HT.forgotPassword()
         HT.changeStatusDropdownMenu()
         HT.changeStatusPass()
         HT.changeStatusChildren()

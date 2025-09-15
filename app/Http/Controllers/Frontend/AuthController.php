@@ -91,7 +91,7 @@ class AuthController extends FrontendController
         $customer = Customer::where('email', $emailReset)->first();
         if(!is_null($customer)){
             Mail::to($emailReset)->send(new ResetPasswordMail($emailReset));
-            return redirect()->route('fe.auth.login')
+            return redirect()->to('/')
             ->with('success','Gửi yêu cầu cập nhật mật khẩu thành công, vui lòng truy cập email của bạn để cập nhật mật khẩu mới');
         }
         return redirect()->route('forgot.customer.password')->with('error','Gửi yêu cầu cập nhật mật khẩu không thành công, email không tồn tại trong hệ thống');
@@ -105,7 +105,7 @@ class AuthController extends FrontendController
             'meta_keyword' => '',
             'meta_description' => '',
             'meta_image' => '',
-            'canonical' => route('customer.profile')
+            'canonical' => ''
         ];
         $system = $this->system;
         $route = 'customer.password.reset';
@@ -123,7 +123,7 @@ class AuthController extends FrontendController
         $customer = Customer::where('email', $email)->first();
 
         if($this->customerService->update($customer->id, $request)) {
-            return redirect()->route('fe.auth.login')->with('success', 'Cập nhật mật khẩu mới thành công');
+            return redirect()->to('/')->with('success', 'Cập nhật mật khẩu mới thành công');
         }
         return redirect()->route('customer.update.password')->with('error', 'Cập nhật mật khẩu không thành công. Hãy thử lại');
     }

@@ -46,6 +46,6 @@
             @endforeach
         </div>
     @else
-        <div>Bạn chưa có sản phẩm nào trong giỏ hàng <a style="color: red;" href="{{ write_url('san-pham') }}">Mua ngay</a></div>
+        <div>Bạn chưa có sản phẩm nào trong giỏ hàng <a style="color: red;" href="{{ write_url('khoa-hoc') }}">Mua ngay</a></div>
     @endif
 </div>

@@ -32,6 +32,19 @@
                 </div>
             </div>
         </div>
+        <div class="uk-grid uk-grid-medium mb20">
+            <div class="uk-width-large-1-1">
+                <div class="form-row">
+                    <input 
+                        type="text"
+                        name="email"
+                        value="{{ old('email', $customerAuth->email ?? '') }}"
+                        placeholder="Nhập vào Địa chỉ Email của bạn *"
+                        class="input-text"
+                    >
+                </div>
+            </div>
+        </div>
         <div class="form-row mb20">
             <input 
                 type="text"

@@ -23,9 +23,13 @@
                     <div class="panel-description">
                         {{ $val['description'] }}
                     </div>
+                    
                 </div>
             </div>
             <div class="col-lg-7">
+                <div class="button-group mb10">
+                    <a target="_blank" href="{{ write_url('gioi-thieu') }}" class="btn btn-primary">Xem thử</a>
+                </div>
                 <div class="ibox">
                     @if(count($val['value']))
                     <div class="ibox-content">

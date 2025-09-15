@@ -26,7 +26,7 @@
                     Đăng nhập
                 </button>
                 <div class="forgot-password">
-                    <a href="#" onclick="forgotPassword()">Quên mật khẩu?</a>
+                    <a href="{{ write_url('customer/password/forgot') }}" onclick="forgotPassword()">Quên mật khẩu?</a>
                 </div>
             </form>
         </div>

@@ -11,7 +11,7 @@
         ],
         [
             'number' => $introduce['block_1_number_3'],
-            'title' => 'Tổ chức hàng đầu'
+            'title' => 'Học viên trên toàn quốc'
         ],
     ];
 
