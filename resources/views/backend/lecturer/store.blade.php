@@ -54,6 +54,12 @@
                 </div>
             </div>
             <div class="col-lg-3">
+                @if(isset($lecturer) && !is_null($lecturer) )
+                <div class="uk-flex uk-flex-middle mb10">
+                    <a class="btn btn-danger mr20" href="lecturer/index">Đóng</a>
+                    <a class="btn btn-primary" href="{{ write_url('giao-vien/'.$lecturer->canonical) }}" target="_blank">Xem</a>
+                </div>
+                @endif
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">

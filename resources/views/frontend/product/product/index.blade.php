@@ -16,6 +16,7 @@
     $totalLessons = collect($product->chapter)
     ->flatMap(fn ($chapter) => $chapter['content'] ?? [])
     ->count();
+    $modelId = $product->id;
 @endphp
 @extends('frontend.homepage.layout')
 @section('content')
@@ -97,6 +98,16 @@
                                             </div>
                                             @endforeach
                                             @endif
+                                        </div>
+                                        <div class="program-notice mt20">
+                                            <p>
+                                                <h3>Điều kiện cấp chứng nhận:</h3>
+                                                <p>Toàn bộ các khóa học của OM'E Việt Nam đều cấp chứng nhận tham gia khóa học và chứng nhận hoàn thành khóa học với điều kiện:</p>
+                                                <p> 1. Chứng nhận tham gia khóa học: Hoàn thành tất cả các bài giảng của khóa</p>
+                                                <p>2. Chứng nhận hoàn thành khóa học:</p>
+                                                <p> Hoàn thành tất cả các bài giảng trong khóa học</p>
+                                                <p>Trả lời đạt tối thiểu 70% số điểm của bài kiểm tra cuối khóa</p>
+                                            </p>
                                         </div>
                                     </div>
                                 </li>
@@ -212,6 +223,7 @@
                                 @if(count($productCatalogue->products))
                                     <div class="product-related-wrapper uk-grid uk-grid-medium">
                                         @foreach($productCatalogue->products as $index => $product)
+                                        @if($product->id === $modelId) @continue @endif
                                             <div class="uk-width-1-1 uk-width-small-1-1 uk-width-medium-1-2 uk-width-large-1-4">
                                                 @include('frontend.component.p-item', ['product' => $product])
                                             </div>

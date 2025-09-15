@@ -130,6 +130,32 @@
                 </div>
             </div>
         </div>
+        <div class="row mb15">
+            <div class="col-lg-12">
+                <div class="form-row">
+                    <label for="">Đánh giá</label>
+                    <input 
+                        type="text"
+                        name="rate"
+                        value="{{ old('rate', ($product->rate) ?? null) }}"
+                        class="form-control int"
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="row mb15">
+            <div class="col-lg-12">
+                <div class="form-row">
+                    <label for="">Số học viên</label>
+                    <input 
+                        type="text"
+                        name="student"
+                        value="{{ old('student', ($product->student) ?? null) }}"
+                        class="form-control int"
+                    >
+                </div>
+            </div>
+        </div>
         <div class="form-row mb20 hidden">
             <label for="" class="control-label text-left">Thời gian BH</label>
             <div class="guarantee">

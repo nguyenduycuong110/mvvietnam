@@ -10,6 +10,8 @@
     $gallery = json_decode($product->album);
     $iframe = $product->iframe;
     $total_lesson = !is_null($product->chapter) ? calculateCourses($product)['durationText'] : '';
+    $student = $product->student;
+    $rate = $product->rate;
 @endphp
 <div class="info">
     <div class="popup">
@@ -26,11 +28,12 @@
                     <div class="stats">
                         <div class="stat-item rating">
                             <img src="/frontend/resources/img/star1.svg" alt="">
-                            <span>{{ $review['totalRate'] != 0 ? $review['totalRate'] : 5 }} ({{ $review['count'] }} đánh giá)</span>
+                            {{-- <span>{{ $review['totalRate'] != 0 ? $review['totalRate'] : 5 }} ({{ $review['count'] }} đánh giá)</span> --}}
+                            <span>{{ $rate }} đánh giá</span>
                         </div>
                         <div class="stat-item students">
                             <img src="/frontend/resources/img/user.svg" alt="">
-                            <span>{{ $students ?? 0 }} học viên</span>
+                            <span>{{ $student ?? 0 }} học viên</span>
                         </div>
                         <div class="stat-item duration">
                             <img src="/frontend/resources/img/time1.svg" alt="">

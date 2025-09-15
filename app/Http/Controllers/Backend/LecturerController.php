@@ -50,7 +50,7 @@ class LecturerController extends Controller
 
     public function store(StoreLecturerRequest $request){
         if($this->lecturerService->create($request)){
-            return redirect()->route('lecturer.index')->with('success','Thêm mới bản ghi thành công');
+            return redirect()->back()->with('success','Thêm mới bản ghi thành công');
         }
         return redirect()->route('lecturer.index')->with('error','Thêm mới bản ghi không thành công. Hãy thử lại');
     }
@@ -71,7 +71,7 @@ class LecturerController extends Controller
 
     public function update($id, UpdateLecturerRequest $request){
         if($this->lecturerService->update($id, $request)){
-            return redirect()->route('lecturer.index')->with('success','Cập nhật bản ghi thành công');
+            return redirect()->back()->with('success','Cập nhật bản ghi thành công');
         }
         return redirect()->route('lecturer.index')->with('error','Cập nhật bản ghi không thành công. Hãy thử lại');
     }

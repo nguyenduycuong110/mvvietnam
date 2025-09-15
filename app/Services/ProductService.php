@@ -386,7 +386,9 @@ class ProductService extends BaseService implements ProductServiceInterface
             'duration',
             'lecturer_id',
             'chapter',
-            'lession_content'
+            'lession_content',
+            'student',
+            'rate'
         ];
     }
 
