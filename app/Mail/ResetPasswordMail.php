@@ -28,7 +28,7 @@ class ResetPasswordMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Thông báo thay đổi mật khẩu từ hệ thống Omegadeco',
+            subject: 'Thông báo thay đổi mật khẩu từ hệ thống MVVIETNAM',
         );
     }
 
