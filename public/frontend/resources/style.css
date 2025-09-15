@@ -4521,3 +4521,11 @@ button{
     background: var(--third-color);
     color:#000;
 }
+
+.update-password .form-row{
+    position: relative;
+}
+.update-password .form-row button{
+    top:50%;
+    transform: translate(0, -50%);
+}
