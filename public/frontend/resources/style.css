@@ -4373,6 +4373,7 @@ button{
     height: 90px;
     border-radius: 10px;
     right: 0;
+    z-index: 10;
 }
 .p-r .bg svg{
     border-top-right-radius: 10px;
