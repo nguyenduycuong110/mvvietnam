@@ -18,7 +18,7 @@
             @foreach($promotions as $key => $promotion)
             @php
                 $startDate = convertDateTime($promotion->startDate);
-                $endDate = convertDateTime($promotion->endDate);
+                $endDate = (!is_null($promotion->endDate)) ? convertDateTime($promotion->endDate) : 'Không hết hạn';
                 $status = '';
                 if($promotion->endDate != NULL && strtotime($promotion->endDate) - strtotime(now()) <= 0){
                     $status = '<span class="text-danger text-small">- Hết Hạn</span>';
