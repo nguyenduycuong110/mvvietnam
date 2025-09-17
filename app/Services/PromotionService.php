@@ -118,7 +118,7 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         if($request->input('method') === PromotionEnum::PRODUCT_AND_QUANTITY){
             $object = $request->input('object');
             $payload = [];
-            if(!is_null($object)){
+            if(!is_null($object) && $request->module_type != 'ProductCatalogue'){
                 foreach($object['id'] as $key => $val){
                     $payload[] = [
                         'product_id' => $val,
