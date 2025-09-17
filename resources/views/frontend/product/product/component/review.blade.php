@@ -71,7 +71,7 @@
                                     </div>
                                     {!! $rating !!}
                                     <div class="description">
-                                        {{ $description }}
+                                        {!! $description !!}
                                     </div>
                                     <a href="{{ $review->image }}" target="_blank" class="image img-cover" style="max-width: 250px;"><img src="{{ $review->image }}" alt=""></a>
                                     <div class="review-toolbox">

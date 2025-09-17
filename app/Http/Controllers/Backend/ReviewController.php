@@ -6,18 +6,23 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\ReviewServiceInterface  as ReviewService;
 use App\Repositories\Interfaces\ReviewRepositoryInterface as ReviewRepository;
+use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
+use App\Http\Requests\Review\StoreReviewRequest;
 
 class ReviewController extends Controller
 {
     protected $reviewService;
     protected $reviewRepository;
+    protected $productRepository;
 
     public function __construct(
         ReviewService $reviewService,
         ReviewRepository $reviewRepository,
+        ProductRepository $productRepository,
     ){
         $this->reviewService = $reviewService;
         $this->reviewRepository = $reviewRepository;
+        $this->productRepository = $productRepository;
     }
 
     public function index(Request $request){
@@ -41,6 +46,27 @@ class ReviewController extends Controller
             'config',
             'reviews'
         ));
+    }
+
+    public function create(){
+        $this->authorize('modules', 'review.create');
+        $products = $this->productRepository->all(['languages']);
+        $config = $this->config();
+        $config['seo'] = __('messages.review');
+        $config['method'] = 'create';
+        $template = 'backend.review.store';
+        return view('backend.dashboard.layout', compact(
+            'products',
+            'template',
+            'config',
+        ));
+    }
+
+    public function store(StoreReviewRequest $request){
+        if($this->reviewService->create($request)){
+            return redirect()->route('review.index')->with('success','Cập nhật bản ghi thành công');
+        }
+        return redirect()->route('review.index')->with('error','Cập nhật bản ghi không thành công. Hãy thử lại');
     }
 
     public function delete($id){

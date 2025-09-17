@@ -267,6 +267,8 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
 
     Route::group(['prefix' => 'review'], function () {
         Route::get('index', [ReviewController::class, 'index'])->name('review.index');
+        Route::get('create', [ReviewController::class, 'create'])->name('review.create');
+        Route::post('store', [ReviewController::class, 'store'])->name('review.store');
         Route::get('{id}/delete', [ReviewController::class, 'delete'])->where(['id' => '[0-9]+'])->name('review.delete');
         Route::delete('{id}/destroy', [ReviewController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('review.destroy');
         
