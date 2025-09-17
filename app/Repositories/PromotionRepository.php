@@ -20,7 +20,41 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
         $this->model = $model;
     }
 
-    public function findByProduct(array $productId = []){
+    public function findByProduct(array $productId = [])
+    {
+        $baseQuery = function($joinClause) use ($productId) {
+            return $this->model->select(
+                'promotions.id as promotion_id',
+                'promotions.discountValue',
+                'promotions.discountType',
+                'promotions.maxDiscountValue',
+                'promotions.endDate',
+                'products.id as product_id',
+                'products.price as product_price'
+            )
+            ->selectRaw($this->getDiscountCalculationQuery())
+            ->when($joinClause, $joinClause)
+            ->join('products', 'products.id', '=', function($join) {
+            })
+            ->where('products.publish', 2)
+            ->where('promotions.publish', 2)
+            ->whereIn(function($query) {
+            }, $productId)
+            ->whereDate('promotions.endDate', '>', now())
+            ->whereDate('promotions.startDate', '<', now());
+        };
+
+        $promotions = $this->findDirectPromotions($productId);
+        
+        if ($promotions->isEmpty()) {
+            $promotions = $this->findCataloguePromotions($productId);
+        }
+
+        return $promotions;
+    }
+
+    private function findDirectPromotions(array $productId)
+    {
         return $this->model->select(
             'promotions.id as promotion_id',
             'promotions.discountValue',
@@ -28,29 +62,9 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
             'promotions.maxDiscountValue',
             'promotions.endDate',
             'products.id as product_id',
-            'products.price as product_price',
+            'products.price as product_price'
         )
-        ->selectRaw(
-            "
-                MAX(
-                    IF(promotions.maxDiscountValue != 0,
-                        LEAST(
-                            CASE 
-                                WHEN discountType = 'cash' THEN discountValue
-                                WHEN discountType = 'percent' THEN products.price * discountValue / 100
-                            ELSE 0
-                            END,
-                            promotions.maxDiscountValue 
-                        ),
-                        CASE 
-                                WHEN discountType = 'cash' THEN discountValue
-                                WHEN discountType = 'percent' THEN products.price * discountValue / 100
-                        ELSE 0
-                        END
-                    )
-                ) as discount
-            "
-        )
+        ->selectRaw($this->getDiscountCalculationQuery())
         ->join('promotion_product_variant as ppv', 'ppv.promotion_id', '=', 'promotions.id')
         ->join('products', 'products.id', '=', 'ppv.product_id')
         ->where('products.publish', 2)
@@ -61,6 +75,103 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
         ->groupBy('ppv.product_id')
         ->get();
     }
+
+    private function findCataloguePromotions(array $productId)
+    {
+        // 1. Lấy tất cả catalogue_ids của products
+        $catalogueIds = DB::table('product_catalogue_product')
+            ->whereIn('product_id', $productId)
+            ->pluck('product_catalogue_id')
+            ->unique()
+            ->toArray();
+
+        if (empty($catalogueIds)) {
+            return collect();
+        }
+
+        // 2. Lấy promotion có model = ProductCatalogue và active
+        $activePromotions = $this->model
+            ->where('promotions.publish', 2)
+            ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(promotions.discountInformation, '$.info.model')) = ?", ['ProductCatalogue'])
+            ->whereDate('promotions.endDate', '>', now())
+            ->whereDate('promotions.startDate', '<', now())
+            ->get();
+
+        // 3. Filter chỉ lấy catalogue_ids có trong promotion JSON
+        $validCatalogueIds = [];
+        foreach ($activePromotions as $promotion) {
+            // discountInformation đã là array
+            $discountInfo = $promotion->discountInformation;
+            $jsonCatalogueIds = $discountInfo['info']['object']['id'] ?? [];
+            
+            // Chỉ lấy những catalogue_id vừa có trong products vừa có trong JSON
+            foreach ($catalogueIds as $catalogueId) {
+                if (in_array((string)$catalogueId, $jsonCatalogueIds)) {
+                    $validCatalogueIds[] = $catalogueId;
+                }
+            }
+        }
+
+        $validCatalogueIds = array_unique($validCatalogueIds);
+
+        if (empty($validCatalogueIds)) {
+            return collect();
+        }
+
+        // 4. Query chỉ với valid catalogue_ids
+        return $this->model->select(
+            'promotions.id as promotion_id',
+            'promotions.discountValue',
+            'promotions.discountType',
+            'promotions.maxDiscountValue',
+            'promotions.endDate',
+            'products.id as product_id',
+            'products.price as product_price'
+        )
+        ->selectRaw($this->getDiscountCalculationQuery())
+        ->join('product_catalogue_product as pcp', function($join) use ($productId, $validCatalogueIds) {
+            $join->whereIn('pcp.product_id', $productId)
+                ->whereIn('pcp.product_catalogue_id', $validCatalogueIds);
+        })
+        ->join('products', 'products.id', '=', 'pcp.product_id')
+        ->where('products.publish', 2)
+        ->where('promotions.publish', 2)
+        ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(promotions.discountInformation, '$.info.model')) = ?", ['ProductCatalogue'])
+        ->where(function($query) use ($validCatalogueIds) {
+            foreach ($validCatalogueIds as $catalogueId) {
+                $query->orWhereRaw("JSON_CONTAINS(JSON_EXTRACT(promotions.discountInformation, '$.info.object.id'), ?)", ['"'.$catalogueId.'"']);
+            }
+        })
+        ->whereDate('promotions.endDate', '>', now())
+        ->whereDate('promotions.startDate', '<', now())
+        ->groupBy('pcp.product_id')
+        ->get();
+    }
+
+
+    private function getDiscountCalculationQuery()
+    {
+        return "
+            MAX(
+                IF(promotions.maxDiscountValue != 0,
+                    LEAST(
+                        CASE 
+                            WHEN promotions.discountType = 'cash' THEN promotions.discountValue
+                            WHEN promotions.discountType = 'percent' THEN products.price * promotions.discountValue / 100
+                            ELSE 0
+                        END,
+                        promotions.maxDiscountValue
+                    ),
+                    CASE 
+                        WHEN promotions.discountType = 'cash' THEN promotions.discountValue
+                        WHEN promotions.discountType = 'percent' THEN products.price * promotions.discountValue / 100
+                        ELSE 0
+                    END
+                )
+            ) as discount
+        ";
+    }
+
 
     public function findPromotionByVariantUuid($uuid = ''){
         return $this->model->select(
@@ -138,3 +249,4 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
 
     
 }
+

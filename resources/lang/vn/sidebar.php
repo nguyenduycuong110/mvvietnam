@@ -86,10 +86,10 @@ return [
                     'title' => 'QL Khuyến mại',
                     'route' => 'promotion/index'
                 ],
-                [
-                    'title' => 'QL Voucher',
-                    'route' => 'voucher/index'
-                ],
+                // [
+                //     'title' => 'QL Voucher',
+                //     'route' => 'voucher/index'
+                // ],
                 [
                     'title' => 'QL nguồn khách',
                     'route' => 'source/index'

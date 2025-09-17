@@ -25,9 +25,9 @@
             'thumbnails' => 'Ảnh Thumbnails'
         ],
         'promotion' => [
-            'order_amount_range' => 'Chiết khấu theo tổng giá trị đơn hàng',
+            // 'order_amount_range' => 'Chiết khấu theo tổng giá trị đơn hàng',
             'product_and_quantity' => 'Chiết khấu theo từng sản phẩm',
-            'buy_product_take_gift' => 'Mua sản phẩm - tặng sản phẩm',
+            // 'buy_product_take_gift' => 'Mua sản phẩm - tặng sản phẩm',
             // 'buy_combo' => 'Mua theo combo'
         ],
         'item' => [
