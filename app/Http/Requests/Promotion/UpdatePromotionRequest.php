@@ -55,7 +55,6 @@ class UpdatePromotionRequest extends FormRequest
         $messages = [
             'name.required' => 'Bạn chưa nhập tên của khuyến mại',
             'code.required' => 'Bạn chưa nhập từ khóa của khuyến mại',
-            // 'code.unique' => 'Mã khuyến mại đã tồn tại, hãy chọn từ khóa khác',
             'startDate.required' => 'Bạn chưa nhập vào ngày bắt đầu khuyến mại',
             'startDate.custom_date_format' => 'Ngày bắt đầu khuyến mãi không đúng định dạng',
             'endDate.required' => 'Bạn chưa nhập vào ngày bắt đầu khuyến mại',

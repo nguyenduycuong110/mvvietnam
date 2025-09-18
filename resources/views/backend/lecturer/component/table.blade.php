@@ -19,14 +19,19 @@
                     <input type="checkbox" value="{{ $lecturer->id }}" class="input-checkbox checkBoxItem">
                 </td>
                 <td>
-                    <img src="{{ $lecturer->image }}" alt="" style="width:60px;height:60px; margin-right:10px;">
-                    <span class="text-success">{{ $lecturer->name }}</span>
+                    <div class="uk-flex uk-flex-middle">
+                        <img src="{{ $lecturer->image }}" alt="" style="width:60px;height:60px; margin-right:10px;">
+                        <span class="text-success mr10">{{ $lecturer->name }}</span>
+                        <a href="{{ write_url('giao-vien/'.$lecturer->canonical) }}" title="" target="_blank">
+                            <i class="fa fa-external-link"></i>
+                        </a>
+                    </div>
                 </td>
                 <td>
                     {{ $lecturer->position }}
                 </td>
-                <td style="width:300px;">
-                    {{ $lecturer->description }}
+                <td style="width:300px;text-align:justify;">
+                    {!! $lecturer->description !!}
                 </td>
                 <td class="text-center js-switch-{{ $lecturer->id }}"> 
                     <input type="checkbox" value="{{ $lecturer->publish }}" class="js-switch status " data-field="publish" data-model="{{ $config['model'] }}" {{ ($lecturer->publish == 2) ? 'checked' : '' }} data-modelId="{{ $lecturer->id }}" />

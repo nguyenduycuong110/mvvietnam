@@ -43,6 +43,10 @@ class Promotion extends Model
         )->withTimestamps();
     }
 
+    public function promotion_product_catalogues(){
+        return $this->belongsToMany(Promotion::class, 'promotion_product_catalogue' , 'promotion_id', 'product_catalogue_id')->withTimestamps();
+    }
+
     public function promotion_rules(){
         return $this->belongsToMany(Product::class,'promotion_rules','promotion_id','product_id')->withPivot('quantity');
     }

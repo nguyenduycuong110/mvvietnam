@@ -88,6 +88,9 @@
                 </div>
             </div>
         </div>
-        @include('backend.dashboard.component.button')
+        <div class="text-right mb15 fixed-bottom">
+            <button class="btn btn-primary" type="submit" name="send" value="send_and_stay">{{ __('messages.save') }}</button>
+            <button class="btn btn-success" type="submit" name="send" value="send_and_exit">Đóng</button>
+        </div>
     </div>
 </form>

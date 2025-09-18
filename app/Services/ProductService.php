@@ -407,6 +407,7 @@ class ProductService extends BaseService implements ProductServiceInterface
     public function combineProductAndPromotion($productId, $products, $flag = false){
 
         $promotions = $this->promotionRepository->findByProduct($productId);
+        
         if($promotions){
 
             if($flag == true){

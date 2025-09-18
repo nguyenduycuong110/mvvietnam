@@ -20,158 +20,69 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
         $this->model = $model;
     }
 
+
     public function findByProduct(array $productId = [])
     {
-        $baseQuery = function($joinClause) use ($productId) {
-            return $this->model->select(
-                'promotions.id as promotion_id',
-                'promotions.discountValue',
-                'promotions.discountType',
-                'promotions.maxDiscountValue',
-                'promotions.endDate',
-                'products.id as product_id',
-                'products.price as product_price'
-            )
-            ->selectRaw($this->getDiscountCalculationQuery())
-            ->when($joinClause, $joinClause)
-            ->join('products', 'products.id', '=', function($join) {
-            })
-            ->where('products.publish', 2)
-            ->where('promotions.publish', 2)
-            ->whereIn(function($query) {
-            }, $productId)
-            ->whereDate('promotions.endDate', '>', now())
-            ->whereDate('promotions.startDate', '<', now());
-        };
-
-        $promotions = $this->findDirectPromotions($productId);
-        
-        if ($promotions->isEmpty()) {
-            $promotions = $this->findCataloguePromotions($productId);
-        }
-
-        return $promotions;
-    }
-
-    private function findDirectPromotions(array $productId)
-    {
         return $this->model->select(
-            'promotions.id as promotion_id',
-            'promotions.discountValue',
-            'promotions.discountType',
-            'promotions.maxDiscountValue',
-            'promotions.endDate',
-            'products.id as product_id',
+            'products.id as product_id', 
             'products.price as product_price'
         )
-        ->selectRaw($this->getDiscountCalculationQuery())
-        ->join('promotion_product_variant as ppv', 'ppv.promotion_id', '=', 'promotions.id')
-        ->join('products', 'products.id', '=', 'ppv.product_id')
-        ->where('products.publish', 2)
-        ->where('promotions.publish', 2)
-        ->whereIn('ppv.product_id', $productId)
-        ->whereDate('promotions.endDate', '>', now())
-        ->whereDate('promotions.startDate', '<', now())
-        ->groupBy('ppv.product_id')
-        ->get();
-    }
-
-    private function findCataloguePromotions(array $productId)
-    {
-        // 1. Lấy tất cả catalogue_ids của products
-        $catalogueIds = DB::table('product_catalogue_product')
-            ->whereIn('product_id', $productId)
-            ->pluck('product_catalogue_id')
-            ->unique()
-            ->toArray();
-
-        if (empty($catalogueIds)) {
-            return collect();
-        }
-
-        // 2. Lấy promotion có model = ProductCatalogue và active
-        $activePromotions = $this->model
-            ->where('promotions.publish', 2)
-            ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(promotions.discountInformation, '$.info.model')) = ?", ['ProductCatalogue'])
-            ->whereDate('promotions.endDate', '>', now())
-            ->whereDate('promotions.startDate', '<', now())
-            ->get();
-
-        // 3. Filter chỉ lấy catalogue_ids có trong promotion JSON
-        $validCatalogueIds = [];
-        foreach ($activePromotions as $promotion) {
-            // discountInformation đã là array
-            $discountInfo = $promotion->discountInformation;
-            $jsonCatalogueIds = $discountInfo['info']['object']['id'] ?? [];
-            
-            // Chỉ lấy những catalogue_id vừa có trong products vừa có trong JSON
-            foreach ($catalogueIds as $catalogueId) {
-                if (in_array((string)$catalogueId, $jsonCatalogueIds)) {
-                    $validCatalogueIds[] = $catalogueId;
-                }
-            }
-        }
-
-        $validCatalogueIds = array_unique($validCatalogueIds);
-
-        if (empty($validCatalogueIds)) {
-            return collect();
-        }
-
-        // 4. Query chỉ với valid catalogue_ids
-        return $this->model->select(
-            'promotions.id as promotion_id',
-            'promotions.discountValue',
-            'promotions.discountType',
-            'promotions.maxDiscountValue',
-            'promotions.endDate',
-            'products.id as product_id',
-            'products.price as product_price'
-        )
-        ->selectRaw($this->getDiscountCalculationQuery())
-        ->join('product_catalogue_product as pcp', function($join) use ($productId, $validCatalogueIds) {
-            $join->whereIn('pcp.product_id', $productId)
-                ->whereIn('pcp.product_catalogue_id', $validCatalogueIds);
-        })
-        ->join('products', 'products.id', '=', 'pcp.product_id')
-        ->where('products.publish', 2)
-        ->where('promotions.publish', 2)
-        ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(promotions.discountInformation, '$.info.model')) = ?", ['ProductCatalogue'])
-        ->where(function($query) use ($validCatalogueIds) {
-            foreach ($validCatalogueIds as $catalogueId) {
-                $query->orWhereRaw("JSON_CONTAINS(JSON_EXTRACT(promotions.discountInformation, '$.info.object.id'), ?)", ['"'.$catalogueId.'"']);
-            }
-        })
-        ->whereDate('promotions.endDate', '>', now())
-        ->whereDate('promotions.startDate', '<', now())
-        ->groupBy('pcp.product_id')
-        ->get();
-    }
-
-
-    private function getDiscountCalculationQuery()
-    {
-        return "
+        ->selectRaw(
+            "
             MAX(
-                IF(promotions.maxDiscountValue != 0,
-                    LEAST(
-                        CASE 
+                CASE
+                    WHEN promotions.maxDiscountValue != 0 AND promotions.maxDiscountValue IS NOT NULL THEN
+                        LEAST(
+                            CASE
+                                WHEN promotions.discountType = 'cash' THEN promotions.discountValue
+                                WHEN promotions.discountType = 'percent' THEN products.price * promotions.discountValue / 100
+                                ELSE 0
+                            END,
+                            promotions.maxDiscountValue
+                        )
+                    ELSE
+                        CASE
                             WHEN promotions.discountType = 'cash' THEN promotions.discountValue
                             WHEN promotions.discountType = 'percent' THEN products.price * promotions.discountValue / 100
                             ELSE 0
-                        END,
-                        promotions.maxDiscountValue
-                    ),
-                    CASE 
-                        WHEN promotions.discountType = 'cash' THEN promotions.discountValue
-                        WHEN promotions.discountType = 'percent' THEN products.price * promotions.discountValue / 100
-                        ELSE 0
-                    END
-                )
-            ) as discount
-        ";
+                        END
+                END
+            ) as discount,
+            MAX(promotions.id) as promotion_id,
+            MAX(promotions.discountValue) as discountValue,
+            MAX(promotions.discountType) as discountType,
+            MAX(promotions.maxDiscountValue) as maxDiscountValue,
+            MAX(promotions.endDate) as endDate
+            "
+        )
+        ->from('products')
+        ->leftJoin('promotion_product_variant as ppv', 'ppv.product_id', '=', 'products.id')
+        ->leftJoin('promotions as promo1', function($join) {
+            $join->on('promo1.id', '=', 'ppv.promotion_id')
+                ->where('promo1.publish', 2)
+                ->where('promo1.method', 'product_and_quantity') 
+                ->whereDate('promo1.endDate', '>', now())
+                ->whereDate('promo1.startDate', '<=', now());
+        })
+        ->leftJoin('product_catalogue_product as pcprod', 'pcprod.product_id', '=', 'products.id')
+        ->leftJoin('promotion_product_catalogue as pcp', 'pcp.product_catalogue_id', '=', 'pcprod.product_catalogue_id')
+        ->leftJoin('promotions as promo2', function($join) {
+            $join->on('promo2.id', '=', 'pcp.promotion_id')
+                ->where('promo2.publish', 2)
+                ->whereDate('promo2.endDate', '>', now())
+                ->whereDate('promo2.startDate', '<=', now());
+        })
+        ->leftJoin('promotions', function($join) {
+            $join->where(function($query) {
+                $query->whereColumn('promotions.id', '=', 'promo1.id')
+                    ->orWhereColumn('promotions.id', '=', 'promo2.id');
+            });
+        })
+        ->where('products.publish', 2)
+        ->whereIn('products.id', $productId)
+        ->groupBy('products.id', 'products.price')
+        ->get();
     }
-
 
     public function findPromotionByVariantUuid($uuid = ''){
         return $this->model->select(

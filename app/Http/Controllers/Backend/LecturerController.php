@@ -48,11 +48,17 @@ class LecturerController extends Controller
         ));
     }
 
-    public function store(StoreLecturerRequest $request){
-        if($this->lecturerService->create($request)){
-            return redirect()->back()->with('success','Thêm mới bản ghi thành công');
+    public function store(StoreLecturerRequest $request)
+    {
+        $success = $this->lecturerService->create($request);
+
+        if ($success) {
+            if ($request->input('send') == 'send_and_stay') {
+                return redirect()->back()->with('success', 'Thêm mới bản ghi thành công');
+            }
+            return redirect()->route('lecturer.index')->with('success', 'Thêm mới bản ghi thành công');
         }
-        return redirect()->route('lecturer.index')->with('error','Thêm mới bản ghi không thành công. Hãy thử lại');
+        return redirect()->back()->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
     }
 
     public function edit($id){
@@ -69,11 +75,23 @@ class LecturerController extends Controller
         ));
     }
 
-    public function update($id, UpdateLecturerRequest $request){
-        if($this->lecturerService->update($id, $request)){
-            return redirect()->back()->with('success','Cập nhật bản ghi thành công');
+    public function update($id, UpdateLecturerRequest $request)
+    {
+        if ($this->lecturerService->update($id, $request)) {
+            if ($request->input('send') == 'send_and_stay') {
+                return redirect()
+                    ->route('lecturer.edit', $id)
+                    ->with('success', 'Cập nhật bản ghi thành công');
+            }
+
+            return redirect()
+                ->route('lecturer.index')
+                ->with('success', 'Cập nhật bản ghi thành công');
         }
-        return redirect()->route('lecturer.index')->with('error','Cập nhật bản ghi không thành công. Hãy thử lại');
+
+        return redirect()
+            ->back()
+            ->with('error', 'Cập nhật bản ghi không thành công. Hãy thử lại');
     }
 
     public function delete($id){

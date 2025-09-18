@@ -54,12 +54,18 @@
                         <div class="row mb15">
                             <div class="col-lg-12">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left">Đánh giá về sản phẩm</label>
-                                    <textarea 
-                                        name="description" 
-                                        class="ck-editor" 
-                                        id="ckDescription"
-                                        data-height="200">{{ old('description', ($review->description) ?? '') }}</textarea>
+                                    <div class="uk-flex uk-flex-middle uk-flex-space-between">
+                                        <label for="" class="control-label text-left">Đánh giá sản phẩm</label>
+                                        <a href="" class="multipleUploadImageCkeditor" data-target="ckContent">{{ __('messages.upload') }}</a>
+                                    </div>
+                                    <textarea
+                                        name="description"
+                                        class="form-control ck-editor"
+                                        placeholder=""
+                                        autocomplete="off"
+                                        id="ckContent"
+                                        data-height="300"
+                                    >{{ old('description', ($model->description) ?? '' ) }}</textarea>
                                 </div>
                             </div>
                         </div>

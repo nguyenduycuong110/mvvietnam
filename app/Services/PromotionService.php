@@ -118,7 +118,7 @@ class PromotionService extends BaseService implements PromotionServiceInterface
         if($request->input('method') === PromotionEnum::PRODUCT_AND_QUANTITY){
             $object = $request->input('object');
             $payload = [];
-            if(!is_null($object) && $request->module_type != 'ProductCatalogue'){
+            if(!is_null($object) && $request->module_type == 'Product'){
                 foreach($object['id'] as $key => $val){
                     $payload[] = [
                         'product_id' => $val,
@@ -126,6 +126,19 @@ class PromotionService extends BaseService implements PromotionServiceInterface
                         'model' => $request->input(PromotionEnum::MODULE_TYPE)
                     ];
                 }
+            }else{
+                $payload = [];
+                foreach($object['id'] as $key => $val){
+                    $payload[] = [
+                       'promotion_id' => $promotion->id,
+                       'product_catalogue_id' => $val
+                    ];
+                }
+                if($method == 'update'){
+                    $promotion->promotion_product_catalogues()->detach();
+                }
+                $promotion->promotion_product_catalogues()->sync($payload);
+                return;
             }
             if($method == 'update'){
                 $promotion->products()->detach();
