@@ -20,15 +20,12 @@ class PromotionRepository extends BaseRepository implements PromotionRepositoryI
         $this->model = $model;
     }
 
-
     public function findByProduct(array $productId = [])
     {
         if (empty($productId)) {
             return collect();
         }
-
         $now = now()->format('Y-m-d H:i:s');
-
         return DB::table('products')
             ->select(
                 'products.id as product_id', 

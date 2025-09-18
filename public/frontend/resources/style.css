@@ -703,17 +703,20 @@ ul li,ol li{
     color: rgba(242, 39, 126, 1);
     font-size: 13px;
 }
-.product-item .percent{
+/* .product-item .percent{
     display: none;
-}
+} */
 .product-item .price-sale{
     font-size: 25px;
     color: rgba(255, 0, 0, 1);
     display: flex;
     position: relative;
+    font-weight: bold;
 }
 .product-item .product-price .price{
-    gap: 22px;
+    gap: 10px;
+    flex-direction: column;
+    position: relative;
 }
 .product-item .price-old{
     font-style: italic;
@@ -728,6 +731,15 @@ ul li,ol li{
     font-size: 14px;
     top: -8px;
     right: -10px;
+}
+.product-item .percent{
+    position: absolute;
+    right: -65px;
+    top: 25%;
+    background: #ffe97a;
+    color: #ec3814;
+    padding: 2px 5px;
+    border-radius: 5px;
 }
 .panel-new-course .btn,
 .panel-bs-courses .btn{
@@ -4528,4 +4540,32 @@ button{
 .update-password .form-row button{
     top:50%;
     transform: translate(0, -50%);
+}
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #ffbda6;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(270deg, #ffb000, #eb1717);
+    border-radius: 15px;
+    transition: width 1s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }

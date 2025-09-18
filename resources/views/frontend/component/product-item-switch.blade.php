@@ -12,6 +12,7 @@
                     $lecturer_name = $product->lecturer_name ?? null;
                     $lecturer_avatar = $product->lecturer_avatar ?? null;
                     $review['star'] = ($product->review_count == 0) ? '0' : $product->review_average/5*100;
+                    $progress = rand(85, 99);
                 @endphp
                 <div class="product-item">
                     <a href="{{ $canonical }}" title="{{ $name }}" class="image img-scaledown img-zoomin">
@@ -37,6 +38,11 @@
                         <div class="product-price">
                             <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                 {!! $price['html'] !!}
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill" style="width: {{ $progress  }}%;">
+                                    <div class="progress-text" id="progressText">Đang bán chạy</div>
+                                </div>
                             </div>
                         </div>
                         <div class="info-lecturer">
