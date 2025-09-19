@@ -796,13 +796,13 @@ input[name="captcha"]{
     .product-item .price-sale {
         font-size: 22px;
     }
+    .product-catalogue .uk-width-large-1-3{
+        width: 50%;
+    }
 }
 @media(max-width:520px){
     .product-item .course > .uk-flex {
         gap: 5px;
-    }
-    .product-item .price-sale{
-        font-size: 18px;
     }
     .product-item .text h4.heading-3,
     .product-item .price-old {
@@ -821,21 +821,34 @@ input[name="captcha"]{
         margin-bottom: 10px;
     }
     .product-item .price-sale {
-        font-size: 13px;
+        font-size: 20px;
     }
     .product-item .text h4.heading-3, .product-item .price-old {
         font-size: 11px;
     }
-    .panel-new-course .uk-width-medium-1-4,
+    /* .panel-new-course .uk-width-medium-1-4,
     .panel-bs-courses .uk-width-medium-1-4 {
         width: 100% !important;
-    }
+    } */
     .product-item .uk-flex{
         display: flex !important;
     }
     .product-item .uk-flex .total-lesson{
         margin-bottom: 0;
         margin-right: 6px;
+    }
+    .info-lecturer{
+        display: none;
+    }
+    .progress-text{
+        width: max-content;
+        font-size: 12px !important;
+    }
+    .product-item .course{
+        display: none;
+    }
+    .product-price{
+        border-bottom: none;
     }
 }
 /*Panel-new-cource */
