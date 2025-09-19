@@ -249,10 +249,8 @@
                                 @endforeach
                             </div>
                             <div class="swiper-button-prev wow fadeInUp" data-wow-delay="0.2s">
-                                <img src="/frontend/resources/img/prev.svg" alt="">
                             </div>
                             <div class="swiper-button-next wow fadeInUp" data-wow-delay="0.2s">
-                                <img src="/frontend/resources/img/next.svg" alt="">
                             </div>
                             <div class="btn">
                                 <a href="{{ write_url('giao-vien') }}" class="btn-view">Xem tất cả giáo viên</a>

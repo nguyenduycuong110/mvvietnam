@@ -4,10 +4,8 @@
 @if(count($slides[$slideKeyword]['item']))
     <div class="panel-slide page-setup">
         <div class="swiper-button-prev">
-            <img src="/frontend/resources/img/prev.svg" alt="">
         </div>
         <div class="swiper-button-next">
-            <img src="/userfiles/image/next.png" alt="">
         </div>
         <div class="uk-container uk-container-center">
             <div class="swiper-container">

@@ -717,6 +717,7 @@ ul li,ol li{
     gap: 10px;
     flex-direction: column;
     position: relative;
+    min-height: 50px;
 }
 .product-item .price-old{
     font-style: italic;
