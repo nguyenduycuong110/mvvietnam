@@ -16,4 +16,4 @@
     @endforeach
 @endif
 
-<script src="backend/library/library.js"></script>
+<script src="backend/library/library.js?v={{ time() }}"></script>
