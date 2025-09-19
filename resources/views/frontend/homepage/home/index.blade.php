@@ -197,15 +197,6 @@
                                     <label class="form-label" for="message">Lời nhắn</label>
                                     <textarea name="message" class="form-input" id="reg_message" cols="30" rows="10" placeholder="Lời nhắn của bạn *"></textarea>
                                 </div>
-                                {{-- <div class="form-group">
-                                    <label class="form-label" for="captcha">Mã xác thực</label>
-                                    <div class="captcha-container">
-                                        <input type="text" name="captcha" class="form-input captcha-input" id="captcha" placeholder="Nhập mã xác thực" required>
-                                        <div class="captcha-display captcha-tooltip" id="captchaDisplay" title="Click để làm mới mã">
-                                            397x67.93<span class="refresh-icon">🔄</span>
-                                        </div>
-                                    </div>
-                                </div> --}}
                                 <button type="submit" class="register-btn" id="">
                                     Đăng ký ngay
                                 </button>

@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     <div class="buttons">
-                        <a href="" title="" class="btn btn-register"><span>Đăng ký ngay</span></a>
+                        <a href="#modal-register" title="" class="btn btn-register" data-uk-modal><span>Đăng ký ngay</span></a>
                         <a href="" class="preview-video" data-video="{{ json_encode($product->iframe) }}" title="" class="btn btn-demo"><span>Xem demo</span></a>
                     </div>
                 </div>
@@ -73,72 +73,10 @@
             </div>
         </div>
     </div>
-    {{-- <div class="product-related mb30">
-        <div class="uk-container uk-container-center">
-            <div class="panel-product">
-                <div class="main-heading">
-                    <div class="panel-head">
-                        <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                            <h2 class="heading-1"><span>Sản phẩm tương tự</span></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body list-product">
-                    @if(count($productCatalogue->products))
-                        <div class="swiper-container">
-                            <div class="swiper-wrapper">
-                                @foreach($productCatalogue->products as $index => $product)
-                                    <div class="swiper-slide">
-                                        @include('frontend.component.product-item', ['product' => $product])
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- <div class="product-related product-view mb40">
-        <div class="uk-container uk-container-center">
-            <div class="panel-product">
-                <div class="main-heading">
-                    <div class="panel-head">
-                        <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                            <h2 class="heading-1"><span>Sản phẩm đã xem</span></h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    @if(isset($widgets['recommend']))
-        <div class="panel-recommend">
-            <div class="panel-head">
-                <h2 class="heading-1">
-                    {{ $widgets['recommend']->name }}
-                </h2>
-            </div>
-            @if(isset($widgets['recommend']->object))
-                <div class="panel-body">
-                    <div class="uk-grid uk-grid-small">
-                        @foreach($widgets['recommend']->object as $k => $v)
-                            <div class="uk-width-medium-1-4 mb6">
-                                @php 
-                                    $name = $v->languages->first()->pivot->name;
-                                    $canonical = write_url($v->languages->first()->pivot->canonical);
-                                @endphp
-                                <a href="{{ $canonical }}" class="recommend-item"><span>{{ $name }}</span></a>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-        </div>
-    @endif --}}
 </div>
 
 <input type="hidden" class="productName" value="{{ $product->name }}">
 <input type="hidden" class="attributeCatalogue" value="{{ json_encode($attributeCatalogue) }}">
 <input type="hidden" class="productCanonical" value="{{ write_url($product->canonical) }}">
 
+@include('frontend.component.modal-register', ['name' => $name ?? ''])

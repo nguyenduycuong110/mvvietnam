@@ -1044,6 +1044,7 @@ input[name="captcha"]{
     padding: 10px 12px;
     font-family: 'Inter', sans-serif !important;
 }
+#modal-register .register-btn,
 .panel-contact .register-btn{
     width: 163px;
     height: 37px;
@@ -4352,6 +4353,15 @@ button{
     .lecturer-page .page-breadcrumb .uk-flex{
         flex-wrap: wrap;
     }
+    .product-container #modal-register{
+        padding-top: 200px;
+    }
+    #modal-register .uk-modal-dialog{
+        padding: 35px !important;
+    }
+    #modal-register .modal-header {
+        margin-bottom: 10px;
+    }
 }
 .lecturer-page{
     padding: 50px 0;
@@ -4597,4 +4607,48 @@ button{
     font-weight: 600;
     font-size: 13px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+#modal-register textarea.form-input {
+    height: 88px;
+    padding: 10px 12px;
+    font-family: 'Inter', sans-serif !important;
+    width: 100%;
+}
+#modal-register .form-input {
+    height: 44px;
+    background: rgba(240, 241, 243, 1);
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-family: 'Inter', sans-serif !important;
+    width: 100%;
+}
+#modal-register input{
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #f9fafb;
+    border: 1px solid #d9d9d9 !important;
+}
+#modal-register .uk-modal-dialog{
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+}
+#modal-register .modal-header{
+    padding: 0;
+}
+#modal-register .modal-title{
+    line-height: 1.2;
+    margin-bottom: 8px;
+}
+#modal-register .register-btn{
+    margin-top: 0;
+}
+#modal-register .uk-flex{
+    justify-content: right;
 }

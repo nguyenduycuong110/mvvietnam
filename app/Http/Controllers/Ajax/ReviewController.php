@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\ReviewServiceInterface  as ReviewService;
-use App\Models\Language;
 use App\Models\Review;
+use App\Classes\ReviewNested;
 
 
 class ReviewController extends Controller
@@ -31,5 +31,30 @@ class ReviewController extends Controller
         return response()->json($response); 
     }
     
-    
+    public function delete(Request $request){
+        
+        $reviewIds = $request->input('array_id'); 
+        
+        $payload = []; 
+        
+        foreach($reviewIds as $k => $item){ $payload[] = $item[$k]; } 
+        
+        $response = Review::whereIn('id', $payload)->delete();
+
+        $this->reviewNestedset = new ReviewNested([
+            'table' => 'reviews',
+            'reviewable_type' => 'App\Models\Product'
+        ]);
+
+        $this->reviewNestedset->Get('level ASC, order ASC');
+
+        $this->reviewNestedset->Recursive(0, $this->reviewNestedset->Set());
+
+        $this->reviewNestedset->Action();
+
+        return response()->json([
+            'status' => $response > 0 ? 200 : 404,
+            'data' => $response,
+        ]);
+    }
 }

@@ -6,9 +6,7 @@ use App\Services\Interfaces\ReviewServiceInterface;
 use App\Services\BaseService;
 use App\Repositories\Interfaces\ReviewRepositoryInterface as ReviewRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Classes\ReviewNested;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AttributeService
@@ -104,7 +102,6 @@ class ReviewService extends BaseService implements ReviewServiceInterface
         DB::beginTransaction();
         try{
             $review = $this->reviewRepository->delete($id);
-
             DB::commit();
             return true;
         }catch(\Exception $e ){

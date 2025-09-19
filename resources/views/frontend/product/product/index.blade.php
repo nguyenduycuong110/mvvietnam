@@ -9,9 +9,7 @@
     $attributeCatalogue = $product->attributeCatalogue;
     $gallery = json_decode($product->album);
     $iframe = $product->iframe;
-    // $total_lesson = $product->total_lesson;
     $lessionContent = !is_null($product->lession_content) ? explode(',', $product->lession_content) : null;
-    // dd($product->chapter);
     $total_time = !is_null($product->chapter) ? calculateCourses($product)['durationText'] : '';
     $totalLessons = collect($product->chapter)
     ->flatMap(fn ($chapter) => $chapter['content'] ?? [])
@@ -71,29 +69,29 @@
                                                     </div>
                                                 </div>
                                                 @if(isset($chapter['content']) && count($chapter['content']))
-                                                <div class="uk-accordion-content">
-                                                    <div class="chapter-lession">
-                                                        @foreach($chapter['content'] as $index => $chapterContent)
-                                                        <div class="lesstion-item">
-                                                            <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                                                                <div class="lesstion-content uk-flex uk-flex-middle">
-                                                                    <div class="number">{{ $index + 1 }}</div>
-                                                                    <div>
-                                                                        <div class="title">{{ $chapterContent['title'] }}</div>
-                                                                        <div class="description">{{ $chapterContent['description'] }}</div>
+                                                    <div class="uk-accordion-content">
+                                                        <div class="chapter-lession">
+                                                            @foreach($chapter['content'] as $index => $chapterContent)
+                                                            <div class="lesstion-item">
+                                                                <div class="uk-flex uk-flex-middle uk-flex-space-between">
+                                                                    <div class="lesstion-content uk-flex uk-flex-middle">
+                                                                        <div class="number">{{ $index + 1 }}</div>
+                                                                        <div>
+                                                                            <div class="title">{{ $chapterContent['title'] }}</div>
+                                                                            <div class="description">{{ $chapterContent['description'] }}</div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="lession-info">
-                                                                    <div class="uk-flex uk-flex-middle">
-                                                                        <span class="time">{{ $chapterContent['time'] }} phút</span>
-                                                                        <span class="lession-type">{{ $chapterContent['type'] }}</span>
+                                                                    <div class="lession-info">
+                                                                        <div class="uk-flex uk-flex-middle">
+                                                                            <span class="time">{{ $chapterContent['time'] }} phút</span>
+                                                                            <span class="lession-type">{{ $chapterContent['type'] }}</span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            @endforeach
                                                         </div>
-                                                        @endforeach
                                                     </div>
-                                                </div>
                                                 @endif
                                             </div>
                                             @endforeach

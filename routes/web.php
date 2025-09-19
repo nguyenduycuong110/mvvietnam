@@ -168,6 +168,7 @@ Route::get('paypal/cancel'.config('apps.general.suffix'), [PaypalController::cla
 
 
 /* FRONTEND AJAX ROUTE */
+Route::post('ajax/review/delete', [AjaxReviewController::class, 'delete'])->name('ajax.review.delete');
 Route::post('ajax/review/create', [AjaxReviewController::class, 'create'])->name('ajax.review.create');
 Route::get('ajax/product/loadVariant', [AjaxProductController::class, 'loadVariant'])->name('ajax.loadVariant');
 Route::get('ajax/product/filter', [AjaxProductController::class, 'filter'])->name('ajax.filter');
@@ -178,10 +179,7 @@ Route::get('ajax/cart/applyCartVoucher', [AjaxCartController::class, 'applyCartV
 Route::get('ajax/cart/unUseVoucher', [AjaxCartController::class, 'unUseVoucher'])->name('ajax.cart.unUseVoucher');
 Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.index');
 Route::post('updatePermission', [CustomerCatalogueController::class, 'updatePermission'])->name('customer.catalogue.updatePermission');
-
 Route::post('ajax/cart/pay', [AjaxCartController::class, 'pay'])->name('ajax.cart.pay');
-
-
 Route::get('ajax/dashboard/findModelObject', [AjaxDashboardController::class, 'findModelObject'])->name('ajax.dashboard.findModelObject');
 Route::get('ajax/dashboard/findProduct', [AjaxDashboardController::class, 'findProduct'])->name('ajax.dashboard.findProduct');
 Route::get('ajax/dashboard/findProductObject', [AjaxDashboardController::class, 'findProductObject'])->name('ajax.findProductObject');
@@ -484,8 +482,6 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
 Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('login');
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');
-
-
 
 
 /* BUYER ROUTES */

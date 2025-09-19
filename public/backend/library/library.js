@@ -308,9 +308,44 @@
             }
         });
     }
+
+
+    HT.removeReviewFlash = () => {
+        $(document).on('click','.btn-delete-fl', function(e){
+            e.preventDefault();
+            const array_id = $('.active-bg .input-checkbox').map(function(index){
+                return {
+                    [index] : $(this).val()
+                };
+            }).get();
+            if (array_id.length === 0) return;
+            const userConfirmed = confirm('Bạn có chắc chắn muốn xóa ?');
+            if(userConfirmed){
+                console.log('Xác nhận');
+                $.ajax({
+                    url: 'ajax/review/delete', 
+                    type: 'POST', 
+                    data: {
+                        array_id , _token
+                    }, 
+                    dataType: 'json', 
+                    success: function(res) {
+                        if(res.status == 200){
+                            toastr.success('Xóa thành công !')
+                            window.location.reload()
+                        }
+                    },
+                });
+            }else{
+                console.log('Hủy');
+                return; 
+            }
+        })
+    }
     
 
 	$(document).ready(function(){
+        HT.removeReviewFlash()
         HT.exportExcel()
         HT.changeOrder()
         HT.approve()
