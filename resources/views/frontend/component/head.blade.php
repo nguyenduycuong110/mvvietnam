@@ -46,7 +46,7 @@
         'frontend/resources/plugins/wow/css/libs/animate.css',
         'frontend/core/plugins/jquery-nice-select-1.1.0/css/nice-select.css',
         'frontend/resources/config.css',
-        'frontend/resources/style.css',
+        'frontend/resources/style.css?time=' . time()
     ];
     if(isset($config['css'])){
         foreach($config['css'] as $key => $val){
