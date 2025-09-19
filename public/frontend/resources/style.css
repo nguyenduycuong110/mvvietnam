@@ -787,6 +787,11 @@ input[name="captcha"]{
     .panel-bs-courses .uk-width-medium-1-4{
         width: 50%;
     }
+    .product-catalogue .uk-grid>*:nth-child(2n+2),
+    .panel-new-course .uk-grid-medium>*:nth-child(2n+2),
+    .panel-bs-courses .uk-grid-medium>*:nth-child(2n+2){
+        padding-left: 10px !important;
+    }
     .info-lecturer .uk-flex{
         display: block;
     }
@@ -798,6 +803,16 @@ input[name="captcha"]{
     }
     .product-catalogue .uk-width-large-1-3{
         width: 50%;
+    }
+    .product-item .image {
+        height: 150px !important;
+    }
+    .progress-bar{
+        margin-top: 10px !important;
+    }
+    .product-price{
+        margin-bottom: 5px !important;
+        padding-bottom: 0 !important;
     }
 }
 @media(max-width:520px){
