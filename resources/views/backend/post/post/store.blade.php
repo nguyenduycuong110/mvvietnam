@@ -28,15 +28,15 @@
                @include('backend.dashboard.component.seo', ['model' => ($post) ?? null])
             </div>
             <div class="col-lg-3">
+                <div class="text-right mb15 fixed-bottom">
+                    @if($config['method'] == 'create')
+                        @include('components.btn-create')
+                    @else
+                        @include('components.btn-update',['model' => $post ?? null])
+                    @endif   
+                </div>
                 @include('backend.post.post.component.aside')
             </div>
-        </div>
-        <div class="text-right mb15 fixed-bottom">
-            @if($config['method'] == 'create')
-                @include('components.btn-create')
-            @else
-                @include('components.btn-update',['model' => $post ?? null])
-            @endif   
         </div>
     </div>
 </form>

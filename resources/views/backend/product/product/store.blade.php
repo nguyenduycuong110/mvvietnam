@@ -22,15 +22,15 @@
                 @include('backend.dashboard.component.seo', ['model' => ($product) ?? null])
             </div>
             <div class="col-lg-3">
+                <div class="text-right mb15 fixed-bottom">
+                    @if($config['method'] == 'create')
+                        @include('components.btn-create')
+                    @else
+                        @include('components.btn-update',['model' => $product ?? null])
+                    @endif            
+                </div>
                 @include('backend.product.product.component.aside')
             </div>
-        </div>
-        <div class="text-right mb15 fixed-bottom">
-            @if($config['method'] == 'create')
-                @include('components.btn-create')
-            @else
-                @include('components.btn-update',['model' => $product ?? null])
-            @endif            
         </div>
     </div>
 </form>
