@@ -105,7 +105,7 @@ class PostService extends BaseService implements PostServiceInterface
                 $this->createRouter($post, $request, $this->controllerName, $languageId);
             }
             DB::commit();
-            return true;
+            return $post;
         }catch(\Exception $e ){
             DB::rollBack();
             // Log::error($e->getMessage());

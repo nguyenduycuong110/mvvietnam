@@ -32,8 +32,11 @@
             </div>
         </div>
         <div class="text-right mb15 fixed-bottom">
-            <button class="btn btn-primary" type="submit" name="send" value="send_and_stay">{{ __('messages.save') }}</button>
-            <button class="btn btn-success" type="submit" name="send" value="send_and_exit">Đóng</button>
+            @if($config['method'] == 'create')
+                @include('components.btn-create')
+            @else
+                @include('components.btn-update',['model' => $post ?? null])
+            @endif   
         </div>
     </div>
 </form>

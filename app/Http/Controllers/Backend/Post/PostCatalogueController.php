@@ -87,13 +87,10 @@ class PostCatalogueController extends Controller
 
     public function store(StorePostCatalogueRequest $request)
     {
-        $success = $this->postCatalogueService->create($request, $this->language);
+        $record = $this->postCatalogueService->create($request, $this->language);
 
-        if ($success) {
-            if ($request->input('send') == 'send_and_stay') {
-                return redirect()->back()->with('success', 'Thêm mới bản ghi thành công');
-            }
-            return redirect()->route('post.catalogue.index')->with('success', 'Thêm mới bản ghi thành công');
+        if ($record) {
+            return redirect()->route('post.catalogue.edit', $record->id)->with('success', 'Thêm mới bản ghi thành công');
         }
         return redirect()->back()->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
     }

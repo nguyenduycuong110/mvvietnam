@@ -85,7 +85,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
                 $this->nestedset();
             }
             DB::commit();
-            return true;
+            return $postCatalogue;
         }catch(\Exception $e ){
             DB::rollBack();
             // Log::error($e->getMessage());

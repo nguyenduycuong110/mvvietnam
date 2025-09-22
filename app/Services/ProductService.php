@@ -149,7 +149,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             }
             
             DB::commit();
-            return true;
+            return $product;
         }catch(\Exception $e ){
             DB::rollBack();
             // Log::error($e->getMessage());

@@ -87,7 +87,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
                 $this->nestedset();
             }
             DB::commit();
-            return true;
+            return $productCatalogue;
         }catch(\Exception $e ){
             DB::rollBack();
             // Log::error($e->getMessage());

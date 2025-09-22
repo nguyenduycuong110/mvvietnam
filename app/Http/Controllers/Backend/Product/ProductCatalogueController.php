@@ -87,13 +87,10 @@ class ProductCatalogueController extends Controller
 
     public function store(StoreProductCatalogueRequest $request)
     {
-        $success = $this->productCatalogueService->create($request, $this->language);
+        $record = $this->productCatalogueService->create($request, $this->language);
 
-        if ($success) {
-            if ($request->input('send') == 'send_and_stay') {
-                return redirect()->back()->with('success', 'Thêm mới bản ghi thành công');
-            }
-            return redirect()->route('product.catalogue.index')->with('success', 'Thêm mới bản ghi thành công');
+        if ($record) {
+            return redirect()->route('product.catalogue.edit',$record->id)->with('success', 'Thêm mới bản ghi thành công');
         }
         return redirect()->back()->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
     }

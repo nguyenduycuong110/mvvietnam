@@ -75,7 +75,7 @@ class ProductController extends Controller
     public function create(){
         $this->authorize('modules', 'product.create');
         $attributeCatalogue = $this->attributeCatalogue->getAll($this->language);
-        $lecturers = $this->lecturerRepository->all();
+        $lecturers = $this->lecturerRepository->all([]);
         $config = $this->configData();
         $config['seo'] = __('messages.product');
         $config['method'] = 'create';
@@ -92,13 +92,10 @@ class ProductController extends Controller
     
     public function store(StoreProductRequest $request)
     {
-        $success = $this->productService->create($request, $this->language);
+        $record = $this->productService->create($request, $this->language);
 
-        if ($success) {
-            if ($request->input('send') == 'send_and_stay') {
-                return redirect()->back()->with('success', 'Thêm mới bản ghi thành công');
-            }
-            return redirect()->route('product.index')->with('success', 'Thêm mới bản ghi thành công');
+        if ($record) {
+            return redirect()->route('product.edit', $record->id)->with('success', 'Thêm mới bản ghi thành công');
         }
         return redirect()->back()->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
     }
@@ -107,7 +104,7 @@ class ProductController extends Controller
     public function edit($id, Request $request){
         $this->authorize('modules', 'product.update');
         $product = $this->productRepository->getProductById($id, $this->language);
-        $lecturers = $this->lecturerRepository->all();
+        $lecturers = $this->lecturerRepository->all([]);
         $attributeCatalogue = $this->attributeCatalogue->getAll($this->language);
         $queryUrl = $request->getQueryString();
         $config = $this->configData();
@@ -148,7 +145,6 @@ class ProductController extends Controller
             ->back()
             ->with('error', 'Cập nhật bản ghi không thành công. Hãy thử lại');
     }
-
 
     public function delete($id){
         $this->authorize('modules', 'product.destroy');
