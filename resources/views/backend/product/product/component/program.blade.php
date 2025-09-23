@@ -17,7 +17,6 @@
             @endphp
 
             @if(isset($oldChapters) && is_array($oldChapters) && count($oldChapters))
-            {{-- @dd($oldChapters) --}}
             @foreach($oldChapters as $chapterIndex => $chapter)
                 <div class="ibox mt20 chapter-wrapper" data-chapter-index="{{ $chapterIndex }}">
                     <div class="ibox-title">
@@ -26,9 +25,10 @@
                                 name="chapter[{{ $chapterIndex }}][title]" 
                                 class="form-control" 
                                 value="{{ $chapter['title'] ?? '' }}" 
-                                placeholder="Nhập vào tên Chapter" style="width:75%;">
+                                placeholder="Nhập vào tên Chapter" style="width:70%;">
                             <div class="chapter-action">
                                 <button type="button" class="add-chapter-item mr10">+Thêm bài học</button>
+                                <button data-toggle="modal" data-target="#modalAddListChapter" type="button" name="" class="add-list-chapter mr10">+ Thêm list bài học</button>
                                 <button type="button" class="remove-chapter-item">Xóa chương</button>
                             </div>
                         </div>
@@ -87,3 +87,25 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalAddListChapter">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Thêm list bài học</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 mb10">
+                        <div class="text-bold mb10">Nhập list bài học</div>
+                        <textarea name="" id="" cols="30" rows="10" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                <button type="submit" name="create" value="create" class="btn btn-primary">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>

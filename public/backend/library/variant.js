@@ -651,7 +651,7 @@
                         <input type="text" name="chapter[${chapterIndex}][title]" class="form-control" placeholder="Nhập vào tên Chapter" value="" style="width:70%;">
                         <div class="chapter-action">
                             <button type="button" class="add-chapter-item mr10">+ Thêm bài học</button>
-                            <button type="button" class="add-list-chapter mr10">+ Thêm list bài học</button>
+                            <button data-toggle="modal" data-target="#modalAddListChapter" type="button" name="" class="add-list-chapter mr10">+ Thêm list bài học</button>
                             <button type="button" class="remove-chapter-item">Xóa bài học</button>
                         </div>
                     </div>
@@ -660,7 +660,6 @@
                 </div>
             </div>`
             $('.program-content').append(html)
-                
         })
         
     }
@@ -704,12 +703,6 @@
         })
     }
 
-    HT.addListChapter = () => {
-        $(document).on('click', '.add-list-chapter', function(){
-            $('#addChapterModal').modal('show');
-        })
-    }
-
     HT.removeChapter = () => {
         $(document).on('click', '.remove-chapter', function(){
             let _this = $(this)
@@ -723,8 +716,95 @@
         })
     }
 
+    HT.trackActiveChapter = () => {
+        let activeChapterWrapper = null;
+        
+        $(document).on('click', '.add-list-chapter', function() {
+            // Lưu reference đến chapter wrapper hiện tại
+            activeChapterWrapper = $(this).closest('.chapter-wrapper');
+            console.log('Active chapter index:', activeChapterWrapper.data('chapter-index'));
+        });
+        
+        // Xử lý submit modal
+        $(document).on('click', 'button[name="create"][value="create"]', function(e) {
+            e.preventDefault();
+            
+            let textareaContent = $('#modalAddListChapter textarea').val().trim();
+            
+            if (!textareaContent) {
+                alert('Vui lòng nhập danh sách bài học');
+                return;
+            }
+            
+            // Sử dụng chapter được lưu trước đó
+            let targetChapterWrapper = activeChapterWrapper;
+            
+            if (!targetChapterWrapper || targetChapterWrapper.length === 0) {
+                alert('Vui lòng click lại button "Thêm list bài học"');
+                return;
+            }
+            
+            let chapterIndex = targetChapterWrapper.data('chapter-index');
+            let currentLessionCount = targetChapterWrapper.find('.chapter-item').length;
+            
+            console.log('Adding to chapter:', chapterIndex, 'Current lessons:', currentLessionCount);
+            
+            let lines = textareaContent.split('\n').filter(line => line.trim() !== '');
+            let chaptersHTML = '';
+            
+            lines.forEach((line, index) => {
+                let lessionIndex = currentLessionCount + index;
+                let trimmedLine = line.trim();
+                
+                // Toàn bộ dòng là tên bài học
+                let title = trimmedLine;
+                let description = '';
+                
+                let chapterItem = `<div class="chapter-item" data-lesssion-index="${lessionIndex}">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="chapter-content">
+                                <div class="title mb10">
+                                    <input type="text" class="form-control" name="chapter[${chapterIndex}][content][${lessionIndex}][title]" placeholder="Nhập vào tên bài học" value="${title}">
+                                </div>
+                                <div class="description">
+                                    <input type="text" class="form-control" name="chapter[${chapterIndex}][content][${lessionIndex}][description]" placeholder="Nhập vào mô tả bài học" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="chapter-info">
+                                <div class="chapter-time mb10">
+                                    <input type="text" class="form-control" name="chapter[${chapterIndex}][content][${lessionIndex}][time]" placeholder="Thời lượng" style="width:100% !important;">
+                                </div>
+                                <div class="chapter-type">
+                                    <input type="text" class="form-control" name="chapter[${chapterIndex}][content][${lessionIndex}][type]" placeholder="Loại bài học: Ví dụ Video, Quiz" style="width:100% !important;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <button type="button" class="form-control btn btn-danger remove-chapter">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+                
+                chaptersHTML += chapterItem;
+            });
+            
+            targetChapterWrapper.find('.ibox-content').append(chaptersHTML);
+            
+            $('#modalAddListChapter textarea').val('');
+            $('#modalAddListChapter').modal('hide');
+            
+            alert(`Đã thêm ${lines.length} bài học thành công!`);
+        });
+    }
+
 
 	$(document).ready(function(){
+        HT.trackActiveChapter()
         HT.setupProductVariant()
         HT.addVariant()
         HT.niceSelect()
@@ -744,7 +824,6 @@
         HT.addChapterItem()
         HT.removeChapter()
         HT.removeProgram()
-        HT.addListChapter()
 	});
 
 })(jQuery);

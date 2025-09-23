@@ -1,6 +1,5 @@
 <div id="createMenuCatalogue" class="modal fade">
     <form action="" class="form create-menu-catalogue" method="">
-       
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
