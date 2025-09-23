@@ -101,23 +101,7 @@ class ProductController extends FrontendController
                 'lecturer_id', '=', $lecturer_id
             ]
         ], true);
-        $courseIds = $courses->pluck('id')->toArray();
-        $order = DB::table('order_product')->whereIn('product_id', $courseIds)->get();
-        if(!$order->isEmpty()){
-            $orderIds = $order->pluck('order_id')->toArray();
-                $orders = $this->orderRepository->findByCondition(
-                condition: [],
-                flag: true, 
-                relation: [],
-                orderBy: ['id', 'desc'],
-                param: [
-                    'whereInField' => 'id',       
-                    'whereIn' => $orderIds         
-                ],
-                withCount: []
-            );
-            $totatStudents = $orders->count('customer_id');
-        }
+        $totatStudents = $courses->count('student');
         $reviews = $this->productService->calculateReviewForLecturer($courses);
         $totalCourses = $courses->count();
         $lecturer = [

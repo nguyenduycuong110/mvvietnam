@@ -398,7 +398,6 @@
 
     HT.switchery = () => {
         $('.js-switch').each(function(){
-            // let _this = $(this)
             var switchery = new Switchery(this, { color: '#1AB394', size: 'small'});
         })
     }
@@ -563,33 +562,6 @@
         $('.updateVariantTr').prev().find('.imageSrc').attr('src', variant.album[0])
     }
 
-    // HT.setupSelectMultiple = (callback) => {
-    //     if($('.selectVariant').length){
-    //         let count = $('.selectVariant').length
-
-    //         $('.selectVariant').each(function(){
-    //             let _this = $(this)
-    //             let attributeCatalogueId = _this.attr('data-catid')
-    //             if(attribute != ''){
-    //                 $.get('ajax/attribute/loadAttribute', {
-    //                     attribute: attribute,
-    //                     attributeCatalogueId: attributeCatalogueId
-    //                 },function(json){
-    //                     if(json.items != 'undefined' && json.items.length){
-    //                         for(let i = 0; i < json.items.length; i++){
-    //                             var option = new Option(json.items[i].text, json.items[i].id, true, true)
-    //                             _this.append(option).trigger('change')
-    //                         }
-    //                     }
-    //                     if(--count === 0 && callback){
-    //                         callback()
-    //                     }
-    //                 });
-    //             }
-    //             HT.getSelect2(_this)
-    //         })
-    //     }
-    // }
 
     HT.setupSelectMultiple = () => {
         return new Promise((resolve) => {
@@ -631,8 +603,6 @@
 
             
             let variantKey = Array.from(_this[0].classList).find(cls => cls.trim().startsWith('tr-variant-')).split('variant-')[1].trim();
-
-            // console.log(variantKey);
 
             let dataIndex = variant.sku.findIndex(sku => sku.includes(variantKey));
 
@@ -678,18 +648,17 @@
             let html = `<div class="ibox mt20 chapter-wrapper" data-chapter-index=${chapterIndex}>
                 <div class="ibox-title">
                     <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                        <input type="text" name="chapter[${chapterIndex}][title]" class="form-control" placeholder="Nhập vào tên Chapter" value="" style="width:75%;">
+                        <input type="text" name="chapter[${chapterIndex}][title]" class="form-control" placeholder="Nhập vào tên Chapter" value="" style="width:70%;">
                         <div class="chapter-action">
-                            <button type="button" class="add-chapter-item mr10">+Thêm bài học</button>
+                            <button type="button" class="add-chapter-item mr10">+ Thêm bài học</button>
+                            <button type="button" class="add-list-chapter mr10">+ Thêm list bài học</button>
                             <button type="button" class="remove-chapter-item">Xóa bài học</button>
                         </div>
                     </div>
                 </div>
                 <div class="ibox-content">
-                
                 </div>
             </div>`
-
             $('.program-content').append(html)
                 
         })
@@ -732,7 +701,12 @@
                 </div>
             </div>`
             _this.parents('.chapter-wrapper').find('.ibox-content').append(chapterItem)
-            // HT.select2()
+        })
+    }
+
+    HT.addListChapter = () => {
+        $(document).on('click', '.add-list-chapter', function(){
+            $('#addChapterModal').modal('show');
         })
     }
 
@@ -749,12 +723,6 @@
         })
     }
 
-    // HT.select2 = () => {
-    //     if($('.setupSelect2').length){
-    //         $('.setupSelect2').select2();
-    //     }
-        
-    // }
 
 	$(document).ready(function(){
         HT.setupProductVariant()
@@ -769,18 +737,14 @@
         HT.updateVariant()
         HT.cancleVariantUpdate()
         HT.saveVariantUpdate()
-        
         HT.setupSelectMultiple().then(() => {
             HT.productVariant();
         });
-
         HT.addProgram()
         HT.addChapterItem()
         HT.removeChapter()
         HT.removeProgram()
-
-        // HT.productVariant()
-        
+        HT.addListChapter()
 	});
 
 })(jQuery);

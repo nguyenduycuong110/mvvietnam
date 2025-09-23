@@ -64,32 +64,6 @@
             </div>
         </div>
         <div class="row mb15">
-            {{-- <div class="col-lg-6">
-                <div class="form-row">
-                    <label for="" class="control-label text-left">Số lượng bài<span class="text-danger">(*)</span></label>
-                    <input 
-                        type="text"
-                        name="total_lesson"
-                        value="{{ old('total_lesson', ($product->total_lesson) ?? '' ) }}"
-                        class="form-control change-title int"
-                        placeholder="VD: 23 bài"
-                        autocomplete="off"
-                    >
-                </div>
-            </div>
-            <div class="col-lg-6 mb15">
-                <div class="form-row">
-                    <label for="" class="control-label text-left">Thời lượng<span class="text-danger">(*)</span></label>
-                    <input 
-                        type="text"
-                        name="duration"
-                        value="{{ old('duration', ($product->duration) ?? '' ) }}"
-                        class="form-control change-title"
-                        placeholder="VD: 12 tiếng"
-                        autocomplete="off"
-                    >
-                </div>
-            </div> --}}
             <div class="col-lg-12">
                 <div class="form-row">
                     <label for="" class="control-label text-left">Giảng viên<span class="text-danger">(*)</span></label>
@@ -202,18 +176,18 @@
 @include('backend.dashboard.component.publish', ['model' => ($product) ?? null, 'hideImage' => false])
 
 @if(!empty($product->qrcode))
-<div class="ibox w">
-    <div class="ibox-title">
-        <h5>Mã QRCODE</h5>
-    </div>
-    <div class="ibox-content qrcode">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="form-row">
-                    {!! $product->qrcode !!}
+    <div class="ibox w">
+        <div class="ibox-title">
+            <h5>Mã QRCODE</h5>
+        </div>
+        <div class="ibox-content qrcode">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-row">
+                        {!! $product->qrcode !!}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endif

@@ -40,7 +40,6 @@
                                 <li><a href="">Giảng Viên</a></li>
                                 <li ><a href="">Đánh Giá</a></li>
                             </ul>
-
                             <ul id="my-id" class="uk-switcher">
                                 <li>
                                     <div class="product-tabs-content">

@@ -50,13 +50,10 @@ class LecturerController extends Controller
 
     public function store(StoreLecturerRequest $request)
     {
-        $success = $this->lecturerService->create($request);
+        $record = $this->lecturerService->create($request);
 
-        if ($success) {
-            if ($request->input('send') == 'send_and_stay') {
-                return redirect()->back()->with('success', 'Thêm mới bản ghi thành công');
-            }
-            return redirect()->route('lecturer.index')->with('success', 'Thêm mới bản ghi thành công');
+        if ($record) {
+            return redirect()->route('lecturer.edit', $record->id)->with('success', 'Thêm mới bản ghi thành công');
         }
         return redirect()->back()->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
     }

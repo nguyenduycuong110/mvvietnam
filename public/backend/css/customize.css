@@ -1452,14 +1452,16 @@ div.edit{
     padding-bottom:10px;
     border-bottom:1px solid #eaeaea;
 }
-
+.add-list-chapter,
 .remove-chapter-item,
 .add-chapter-item{
     background: transparent;
     border:0;
     color:blue;
 }
-
+.add-list-chapter{
+    color: #1ab394;
+}
 .remove-chapter-item{
     color:#ec4758;
 }

@@ -42,7 +42,7 @@ class LecturerService extends BaseService implements LecturerServiceInterface
             $payload['canonical'] = Str::slug($request->input('name'));
             $lecturer = $this->lecturerRepository->create($payload);
             DB::commit();
-            return true;
+            return $lecturer;
         }catch(\Exception $e ){
             DB::rollBack();
             // Log::error($e->getMessage());

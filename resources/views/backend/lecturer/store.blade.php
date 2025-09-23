@@ -54,12 +54,15 @@
                 </div>
             </div>
             <div class="col-lg-3">
-                @if(isset($lecturer) && !is_null($lecturer) )
-                <div class="uk-flex uk-flex-middle mb10">
-                    <a class="btn btn-danger mr20" href="lecturer/index">Đóng</a>
-                    <a class="btn btn-primary" href="{{ write_url('giao-vien/'.$lecturer->canonical) }}" target="_blank">Xem</a>
+                <div class="text-right mb15 fixed-bottom">
+                    @if($config['method'] == 'create')
+                        @include('components.btn-create')
+                    @else
+                        <button class="btn btn-primary mr10" type="submit" name="send" value="send_and_stay">{{ __('messages.save') }}</button>
+                        <a class="btn btn-danger mr10" href="{{ write_url('giao-vien/'.$lecturer->canonical) }}" style="color:#fff;" target="_blank">Xem</a>
+                        <button class="btn btn-success" type="submit" name="send" value="send_and_exit">Đóng</button>
+                    @endif            
                 </div>
-                @endif
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row">
@@ -87,10 +90,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="text-right mb15 fixed-bottom">
-            <button class="btn btn-primary" type="submit" name="send" value="send_and_stay">{{ __('messages.save') }}</button>
-            <button class="btn btn-success" type="submit" name="send" value="send_and_exit">Đóng</button>
         </div>
     </div>
 </form>
