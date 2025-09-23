@@ -505,7 +505,11 @@ ul li,ol li{
 .panel-product-catalogue .uk-width-large-1-4{
     margin-bottom: 25px;
 }
-.panel-product-catalogue .uk-width-large-1-4:nth-child(1) img{
+.panel-product-catalogue .uk-width-large-1-4 img{
+    width: 60px;
+    height: 60px;
+}
+/* .panel-product-catalogue .uk-width-large-1-4:nth-child(1) img{
     width: 57px;
     height: 48px;
 }
@@ -536,7 +540,7 @@ ul li,ol li{
 .panel-product-catalogue .uk-width-large-1-4:nth-child(8) img{
     width: 55px;
     height: 55px;
-}
+} */
 .product-catalogue-item{
     padding: 20px;
     padding-bottom: 25px;
