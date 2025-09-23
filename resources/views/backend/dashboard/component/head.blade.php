@@ -15,7 +15,7 @@
 
 <link href="backend/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 <link href="backend/css/style.css" rel="stylesheet">
-<link href="backend/css/customize.css" rel="stylesheet">
+<link href="backend/css/customize.css?time=<?php echo time(); ?>" rel="stylesheet">
 <script src="backend/js/jquery-3.1.1.min.js"></script>
 <script>
     var BASE_URL = '{{ config('app.url')  }}'
