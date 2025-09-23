@@ -492,11 +492,11 @@ ul li,ol li{
 }
 .panel-product-catalogue .image{
     margin-bottom: 15px;
-    width: 66px;
     position: relative;
     display: flex;
     align-items: center;
-    height: 53px;
+    width: 60px;
+    height: 60px;
     justify-content: center;
 }
 .panel-product-catalogue .image svg{
