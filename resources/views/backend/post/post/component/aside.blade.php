@@ -46,25 +46,6 @@
 </div>
 <div class="ibox w">
     <div class="ibox-title">
-        <h5>Chọn giao diện</h5>
-    </div>
-    <div class="ibox-content">
-        <div class="row mb15">
-            <div class="col-lg-12">
-                <div class="form-row">
-                    <select name="template" class="form-control setupSelect2" id="">
-                        <option value="0">Chọn giao diện</option>
-                        @if(isset($post))
-                            <option value="1" {{ $post->template == 1 ? 'selected' : '' }}>Thi công nội thất, thiết kế nội thất</option>
-                        @endif
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="ibox w">
-    <div class="ibox-title">
         <h5>Trạng thái menu</h5>
     </div>
     <div class="ibox-content">
