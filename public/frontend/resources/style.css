@@ -2379,16 +2379,21 @@ button{
     font-weight: 400;
 }
 .post-container .content > *{
-    font-size: 14px;
+    /* font-size: 14px; */
     text-align: justify;
     font-weight: 400;
     line-height: 1.6;
 }
-.post-container .content ul{
-    padding-left: 0;
-}
 .post-container .content ul li{
     margin-bottom: 10px;
+    list-style: disc;
+}
+.post-container .content img{
+    height: auto;
+    width: auto;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
 }
 .post-container .wrapper{
     padding: 30px;
@@ -3953,9 +3958,8 @@ button{
 }
 
 .table-of-contents .toc-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
+    list-style: none;
+    margin: 0;
 }
 
 .table-of-contents li {

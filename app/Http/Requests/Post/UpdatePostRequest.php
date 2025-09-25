@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -23,7 +25,13 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'canonical' => 'required|unique:routers,canonical, '.$this->id.',module_id',
+            'canonical' => [
+                'required',
+                Rule::unique('routers')->ignore($this->id, 'module_id'),
+                function ($a, $v, $fail) {
+                    DB::table('post_language')->where('canonical', $v)->where('post_id', '!=', $this->id)->exists() && $fail('Đường dẫn đã tồn tại');
+                }
+            ],
             'post_catalogue_id' => 'gt:0',
         ];
     }
