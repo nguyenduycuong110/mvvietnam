@@ -2389,8 +2389,8 @@ button{
     list-style: disc;
 }
 .post-container .content img{
-    height: auto;
-    width: auto;
+    height: auto !important;
+    width: auto !important;
     display: flex;
     margin-left: auto;
     margin-right: auto;
