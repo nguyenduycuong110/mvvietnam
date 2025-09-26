@@ -186,8 +186,7 @@
                                 <div class="lecturer-review mb20">
                                     <div class="review mb10">
                                         ⭐
-                                        <p class="average">{{ $lecturer['reviews']['average'] }}/5 </p>
-                                        <p class="count">({{ $lecturer['reviews']['count'] }} đánh giá)</p>
+                                        <p class="count" style="margin-left: 4px;">{{ $lecturer['reviews']['count'] }} đánh giá</p>
                                     </div>
                                     <div class="students mb10">
                                         👥 {{ $lecturer['total_students'] }} học viên

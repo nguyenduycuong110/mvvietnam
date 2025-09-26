@@ -204,6 +204,9 @@
                         let countProduct = res.countProduct
                         $('.caption strong').html(`${countProduct} kết quả`)
                         $('.product-list').html(res.data);
+                        $('html, body').animate({
+                            scrollTop: $('#panel-body').offset().top - 100
+                        }, 500);
                     }
                 });
             }

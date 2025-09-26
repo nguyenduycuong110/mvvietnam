@@ -782,7 +782,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         $reviewAverage = null;
         $reviewAverageLecturer = null;
         foreach($courses as $item){
-            $reviewCount += $item->reviews->count();
+            $reviewCount += $item->rate;
             $reviewAverage += $item->reviews->avg('score');
         }
         $reviewAverageLecturer = round($reviewAverage / $totalCourses, 1);
