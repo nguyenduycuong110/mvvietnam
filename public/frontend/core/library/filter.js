@@ -201,6 +201,8 @@
                     type: 'GET',
                     dataType: 'json',
                     success: function(res) {
+                        let countProduct = res.countProduct
+                        $('.caption strong').html(`${countProduct} kết quả`)
                         $('.product-list').html(res.data);
                     }
                 });
