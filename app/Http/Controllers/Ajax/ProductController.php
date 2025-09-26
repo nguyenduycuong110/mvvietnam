@@ -234,7 +234,7 @@ class ProductController extends Controller
             $html .= '</div>';
             $html .= $products->links('pagination::bootstrap-4');
         } else {
-            $html .= '<div class="no-result">Không có sản phẩm phù hợp</div>';
+            $html .= '<div class="no-result">Không có kết quả phù hợp</div>';
         }
         return $html;
     }

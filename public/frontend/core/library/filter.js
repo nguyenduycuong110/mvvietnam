@@ -105,7 +105,7 @@
                 let html = res.data
                 let countProduct = res.countProduct
                 $('.caption strong').html('')
-                $('.caption strong').html(`${countProduct} sản phẩm`)
+                $('.caption strong').html(`${countProduct} kết quả`)
                 $('.product-catalogue .product-list').html(html);
             },
         });
@@ -179,15 +179,36 @@
                     let html = res.data
                     let countProduct = res.countProduct
                     $('.caption strong').html('')
-                    $('.caption strong').html(`${countProduct} sản phẩm`)
-                    $('.product-catalogue .product-list').html(html);
+                    $('.caption strong').html(`${countProduct} kết quả`)
+                    $('.product-catalogue.product-list').html(html);
                 },
             });
+        })
+    }
+
+    HT.loadHtmlPagination = () => {
+        $(document).on('click', '.pagination .page-link', function(e){
+            let _this = $(this)
+            let pageUrl = _this.attr('href');
+            if(!pageUrl) return;
+            console.log(pageUrl);
+            if(pageUrl.includes('/ajax/')){
+                e.preventDefault();
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(res) {
+                        $('.product-list').html(res.data);
+                    }
+                });
+            }
         })
     }
     
 
 	$(document).ready(function(){
+        HT.loadHtmlPagination()
         HT.sortProduct()
         HT.priceRange()
         HT.filter()

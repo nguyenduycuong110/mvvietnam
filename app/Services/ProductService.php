@@ -93,7 +93,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             });
         }
 
-        $perPage = (!is_null($productCatalogue))  ? 6 : 24;
+        $perPage = (!is_null($productCatalogue))  ? 12 : 24;
 
         $condition = [
             'keyword' => addslashes($request->input('keyword')),
@@ -471,7 +471,7 @@ class ProductService extends BaseService implements ProductServiceInterface
     }
 
     public function filter($request){
-        $perpage = $request->input('perpage');
+        $perpage = $request->input('perpage') ?? 12;
         $param['priceQuery'] = $this->priceQuery($request);
         $param['attributeQuery'] = $this->attributeQuery($request);
         $param['rateQuery'] = $this->rateQuery($request);

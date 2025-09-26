@@ -52,7 +52,7 @@
                 </div>
                 @else
                     <div class="pt20 pb20">
-                        Không có sản phẩm phù hợp....
+                        Không có kết quả phù hợp....
                     </div>
 
                 @endif

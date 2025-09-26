@@ -101,7 +101,7 @@ class ProductController extends FrontendController
                 'lecturer_id', '=', $lecturer_id
             ]
         ], true);
-        $totatStudents = $courses->count('student');
+        $totatStudents = $courses->sum('student');
         $reviews = $this->productService->calculateReviewForLecturer($courses);
         $totalCourses = $courses->count();
         $lecturer = [
