@@ -309,7 +309,7 @@ class ProductCatalogueController extends FrontendController
                 'frontend/resources/css/custom.css',
             ],
             'js' => [
-                'frontend/core/library/filter.js',
+                'frontend/core/library/filter.js?'.time(),
                 'frontend/resources/plugins/OwlCarousel2-2.3.4/dist/owl.carousel.min.js',
                 'frontend/resources/library/js/carousel.js',
             ],

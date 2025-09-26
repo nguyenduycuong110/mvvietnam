@@ -55,6 +55,8 @@
                 },
                 success: function(res) {
                     let html = res.data
+                    let countProduct = res.countProduct
+                    $('.caption strong').html(`${countProduct} kết quả`)
                     $('.product-catalogue .product-list').html(html);
                 },
             });
