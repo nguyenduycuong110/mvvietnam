@@ -468,38 +468,208 @@ class WidgetService extends BaseService implements WidgetServiceInterface
     /**
      * Get objects (products/posts) batch for all categories
      */
-    private function getObjectsBatch(string $catalogueModel, Collection $catalogues, int $language, Collection $widgets, Collection $paramsMap): array
+    // private function getObjectsBatch(string $catalogueModel, Collection $catalogues, int $language, Collection $widgets, Collection $paramsMap): array
+    // {
+    //     if ($catalogues->isEmpty()) {
+    //         return [];
+    //     }
+
+    //     $objectModel = $this->getObjectModel($catalogueModel);
+    //     $objectTable = $this->getTableName($objectModel);
+    //     $pivotTable = $this->getPivotTableName($objectModel);
+    //     $catalogueIdField = str_replace('Catalogue', '_catalogue', $catalogueModel);
+    //     $catalogueIdField = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $catalogueIdField)) . '_id';
+    //     $objectIdField = $objectModel . '_id';
+
+    //     // Get all category IDs (including recursive)
+    //     $allCategoryIds = [];
+    //     foreach ($catalogues as $catalogue) {
+    //         $recursiveIds = $this->getRecursiveCategoryIds($catalogue->id, $catalogueModel);
+    //         $allCategoryIds = array_merge($allCategoryIds, $recursiveIds);
+    //     }
+    //     $allCategoryIds = array_unique(array_filter($allCategoryIds));
+
+    //     if (empty($allCategoryIds)) {
+    //         return [];
+    //     }
+
+    //     // MEGA QUERY: Get all objects with all relationships
+    //     $objectLanguageTable = $objectModel . '_language';
+    //     $objectCatalogueTable = $this->getTableName($catalogueModel);
+    //     $objectCatalogueLanguageTable = str_replace('_catalogues', '_catalogue_language', $objectCatalogueTable);
+    //     $categoryIdList = implode(',', array_map('intval', $allCategoryIds));
+
+    //     $sql = "
+    //             SELECT 
+    //                 o.*,
+    //                 p.{$catalogueIdField} as category_id,
+    //                 ol.name as language_name,
+    //                 ol.canonical,
+    //                 ol.meta_title,
+    //                 ol.meta_description,
+    //                 ol.description as language_description,
+    //                 ol.content,
+    //                 GROUP_CONCAT(DISTINCT oc.id) as catalogue_ids,
+    //                 GROUP_CONCAT(DISTINCT ocl.name) as catalogue_names
+    //         ";
+
+    //     if ($objectModel === 'product') {
+    //         $sql .= ",
+    //                 l.name as lecturer_name,
+    //                 l.image as lecturer_image,
+    //                 l.canonical as lecturer_canonical,
+    //                 COUNT(DISTINCT r.id) as review_count,
+    //                 COALESCE(AVG(r.score), 0) as review_average,
+    //                 GROUP_CONCAT(DISTINCT pv.id) as variant_ids
+    //             ";
+    //     }
+
+
+    //     $sql .= "
+    //             FROM {$objectTable} o
+    //             INNER JOIN {$pivotTable} p ON o.id = p.{$objectIdField}
+    //             LEFT JOIN {$objectLanguageTable} ol ON o.id = ol.{$objectIdField} AND ol.language_id = ?
+    //             LEFT JOIN {$pivotTable} poc ON o.id = poc.{$objectIdField}
+    //             LEFT JOIN {$objectCatalogueTable} oc ON poc.{$catalogueIdField} = oc.id
+    //             LEFT JOIN {$objectCatalogueLanguageTable} ocl ON oc.id = ocl.{$this->getCatalogueIdField($objectCatalogueTable)} 
+    //                 AND ocl.language_id = ?
+    //         ";
+
+    //     if ($objectModel === 'product') {
+    //         $sql .= "
+    //                 LEFT JOIN lecturers l ON o.lecturer_id = l.id
+    //                 LEFT JOIN reviews r ON o.id = r.reviewable_id AND r.reviewable_type = 'App\\\\Models\\\\Product'
+    //                 LEFT JOIN product_variants pv ON o.id = pv.product_id
+    //             ";
+    //     }
+
+    //     $sql .= "
+    //             WHERE p.{$catalogueIdField} IN ({$categoryIdList})
+    //             AND o.publish = 2 
+    //             AND o.deleted_at IS NULL
+    //             GROUP BY o.id, p.{$catalogueIdField}
+    //             ORDER BY o.order DESC, o.id DESC
+    //         ";
+        
+    //     $objects = collect(DB::select($sql, [$language, $language]));
+
+    //     // Group by category and limit per widget
+    //     $result = [];
+
+    //     foreach ($catalogues as $catalogue) {
+    //         $categoryObjects = $objects->where('category_id', $catalogue->id);
+
+    //         // Apply limit from widget params
+    //         $widget = $widgets->firstWhere('model_id', function ($modelId) use ($catalogue) {
+    //             return is_array($modelId) ? in_array($catalogue->id, $modelId) : $modelId == $catalogue->id;
+    //         });
+    //         if ($widget) {
+    //             $params = $paramsMap->get($widget->keyword, []);
+    //             $limit = $params['limit'] ?? 10;
+    //             $categoryObjects = $categoryObjects->take($limit);
+    //         }
+
+    //         // Process objects
+    //         $processedObjects = $categoryObjects->map(function ($item) use ($objectModel) {
+    //             // Sửa cấu trúc languages để giống Eloquent
+    //             $languageData = (object) [
+    //                 'name' => $item->language_name,
+    //                 'canonical' => $item->canonical,
+    //                 'meta_title' => $item->meta_title,
+    //                 'meta_description' => $item->meta_description,
+    //                 'description' => $item->language_description,
+    //                 'content' => $item->content,
+    //                 'pivot' => (object) [ // Thêm pivot giả lập
+    //                     'name' => $item->language_name,
+    //                     'canonical' => $item->canonical
+    //                 ]
+    //             ];
+    //             $item->languages = collect([$languageData]); // Đặt languages là Collection
+
+    //             // Add catalogue relationships
+    //             if ($item->catalogue_ids) {
+    //                 $catalogueIds = explode(',', $item->catalogue_ids);
+    //                 $catalogueNames = explode(',', $item->catalogue_names);
+    //                 $item->product_catalogues = collect($catalogueIds)->map(function ($id, $index) use ($catalogueNames) {
+    //                     return (object) [
+    //                         'id' => $id,
+    //                         'languages' => (object) ['name' => $catalogueNames[$index] ?? '']
+    //                     ];
+    //                 });
+    //             }
+
+    //             // Add product-specific data
+    //             if ($objectModel === 'Product') {
+    //                 $item->review_count = (int) $item->review_count;
+    //                 $item->review_average = round((float) $item->review_average, 1);
+
+    //                 if ($item->variant_ids) {
+    //                     $item->product_variants = collect(explode(',', $item->variant_ids))->map(function ($id) {
+    //                         return (object) ['id' => $id];
+    //                     });
+    //                 }
+    //             }
+
+    //             // Clean up
+    //             unset(
+    //                 $item->language_name,
+    //                 $item->canonical,
+    //                 $item->meta_title,
+    //                 $item->meta_description,
+    //                 $item->language_description,
+    //                 $item->content,
+    //                 $item->catalogue_ids,
+    //                 $item->catalogue_names,
+    //                 $item->variant_ids,
+    //                 $item->category_id
+    //             );
+
+    //             return $item;
+    //         });
+
+    //         $result[$catalogue->id] = $processedObjects;
+    //     }
+
+
+    //     return $result;
+    // }
+
+    private function normalizeField(string $catalogueModel): string
     {
-        if ($catalogues->isEmpty()) {
-            return [];
-        }
+        return Str::snake(str_replace('Catalogue', '_catalogue', $catalogueModel)) . '_id';
+    }
 
-        $objectModel = $this->getObjectModel($catalogueModel);
-        $objectTable = $this->getTableName($objectModel);
-        $pivotTable = $this->getPivotTableName($objectModel);
-        $catalogueIdField = str_replace('Catalogue', '_catalogue', $catalogueModel);
-        $catalogueIdField = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $catalogueIdField)) . '_id';
-        $objectIdField = $objectModel . '_id';
+     private function getObjectsBatch(string $catalogueModel, Collection $catalogues, int $language, Collection $widgets, Collection $paramsMap): array
+        {
+            if ($catalogues->isEmpty()) {
+                return [];
+            }
 
-        // Get all category IDs (including recursive)
-        $allCategoryIds = [];
-        foreach ($catalogues as $catalogue) {
-            $recursiveIds = $this->getRecursiveCategoryIds($catalogue->id, $catalogueModel);
-            $allCategoryIds = array_merge($allCategoryIds, $recursiveIds);
-        }
-        $allCategoryIds = array_unique(array_filter($allCategoryIds));
+            $objectModel = $this->getObjectModel($catalogueModel);
+            $objectTable = $this->getTableName($objectModel);
+            $pivotTable = $this->getPivotTableName($objectModel);
+            $catalogueIdField = $this->normalizeField($catalogueModel);
+            $objectIdField = $objectModel . '_id';
 
-        if (empty($allCategoryIds)) {
-            return [];
-        }
+            // Lấy tất cả category IDs (bao gồm con cháu)
+            $allCategoryIds = [];
+            foreach ($catalogues as $catalogue) {
+                $recursiveIds = $this->getRecursiveCategoryIds($catalogue->id, $catalogueModel);
+                $allCategoryIds = array_merge($allCategoryIds, $recursiveIds);
+            }
+            $allCategoryIds = array_unique(array_filter($allCategoryIds));
 
-        // MEGA QUERY: Get all objects with all relationships
-        $objectLanguageTable = $objectModel . '_language';
-        $objectCatalogueTable = $this->getTableName($catalogueModel);
-        $objectCatalogueLanguageTable = str_replace('_catalogues', '_catalogue_language', $objectCatalogueTable);
-        $categoryIdList = implode(',', array_map('intval', $allCategoryIds));
+            if (empty($allCategoryIds)) {
+                return [];
+            }
 
-        $sql = "
+            $objectLanguageTable = $objectModel . '_language';
+            $objectCatalogueTable = $this->getTableName($catalogueModel);
+            $objectCatalogueLanguageTable = str_replace('_catalogues', '_catalogue_language', $objectCatalogueTable);
+            $categoryIdList = implode(',', array_map('intval', $allCategoryIds));
+
+            // --- FULL SQL ---
+            $sql = "
                 SELECT 
                     o.*,
                     p.{$catalogueIdField} as category_id,
@@ -513,8 +683,8 @@ class WidgetService extends BaseService implements WidgetServiceInterface
                     GROUP_CONCAT(DISTINCT ocl.name) as catalogue_names
             ";
 
-        if ($objectModel === 'product') {
-            $sql .= ",
+            if ($objectModel === 'product') {
+                $sql .= ",
                     l.name as lecturer_name,
                     l.image as lecturer_image,
                     l.canonical as lecturer_canonical,
@@ -522,10 +692,9 @@ class WidgetService extends BaseService implements WidgetServiceInterface
                     COALESCE(AVG(r.score), 0) as review_average,
                     GROUP_CONCAT(DISTINCT pv.id) as variant_ids
                 ";
-        }
+            }
 
-
-        $sql .= "
+            $sql .= "
                 FROM {$objectTable} o
                 INNER JOIN {$pivotTable} p ON o.id = p.{$objectIdField}
                 LEFT JOIN {$objectLanguageTable} ol ON o.id = ol.{$objectIdField} AND ol.language_id = ?
@@ -535,104 +704,119 @@ class WidgetService extends BaseService implements WidgetServiceInterface
                     AND ocl.language_id = ?
             ";
 
-        if ($objectModel === 'product') {
-            $sql .= "
+            if ($objectModel === 'product') {
+                $sql .= "
                     LEFT JOIN lecturers l ON o.lecturer_id = l.id
                     LEFT JOIN reviews r ON o.id = r.reviewable_id AND r.reviewable_type = 'App\\\\Models\\\\Product'
                     LEFT JOIN product_variants pv ON o.id = pv.product_id
                 ";
-        }
+            }
 
-        $sql .= "
+            $sql .= "
                 WHERE p.{$catalogueIdField} IN ({$categoryIdList})
                 AND o.publish = 2 
                 AND o.deleted_at IS NULL
                 GROUP BY o.id, p.{$catalogueIdField}
                 ORDER BY o.order DESC, o.id DESC
             ";
-        
-        $objects = collect(DB::select($sql, [$language, $language]));
 
-        // Group by category and limit per widget
-        $result = [];
+            // Query DB
+            $rows = collect(DB::select($sql, [$language, $language]));
 
-        foreach ($catalogues as $catalogue) {
-            $categoryObjects = $objects->where('category_id', $catalogue->id);
+            // Gom objects theo category_id
+            $objectsByCategory = [];
+            foreach ($rows as $row) {
+                $cid = (int)($row->category_id ?? 0);
+                if ($cid <= 0) continue;
 
-            // Apply limit from widget params
-            $widget = $widgets->firstWhere('model_id', function ($modelId) use ($catalogue) {
-                return is_array($modelId) ? in_array($catalogue->id, $modelId) : $modelId == $catalogue->id;
-            });
-            if ($widget) {
-                $params = $paramsMap->get($widget->keyword, []);
-                $limit = $params['limit'] ?? 10;
-                $categoryObjects = $categoryObjects->take($limit);
-            }
-
-            // Process objects
-            $processedObjects = $categoryObjects->map(function ($item) use ($objectModel) {
-                // Sửa cấu trúc languages để giống Eloquent
+                // Chuẩn hóa languages
                 $languageData = (object) [
-                    'name' => $item->language_name,
-                    'canonical' => $item->canonical,
-                    'meta_title' => $item->meta_title,
-                    'meta_description' => $item->meta_description,
-                    'description' => $item->language_description,
-                    'content' => $item->content,
-                    'pivot' => (object) [ // Thêm pivot giả lập
-                        'name' => $item->language_name,
-                        'canonical' => $item->canonical
+                    'name'             => $row->language_name,
+                    'canonical'        => $row->canonical,
+                    'meta_title'       => $row->meta_title,
+                    'meta_description' => $row->meta_description,
+                    'description'      => $row->language_description,
+                    'content'          => $row->content,
+                    'pivot'            => (object)[
+                        'name'      => $row->language_name,
+                        'canonical' => $row->canonical,
                     ]
                 ];
-                $item->languages = collect([$languageData]); // Đặt languages là Collection
+                $row->languages = collect([$languageData]);
 
-                // Add catalogue relationships
-                if ($item->catalogue_ids) {
-                    $catalogueIds = explode(',', $item->catalogue_ids);
-                    $catalogueNames = explode(',', $item->catalogue_names);
-                    $item->product_catalogues = collect($catalogueIds)->map(function ($id, $index) use ($catalogueNames) {
-                        return (object) [
-                            'id' => $id,
-                            'languages' => (object) ['name' => $catalogueNames[$index] ?? '']
+                // Chuẩn hóa catalogue quan hệ
+                if ($row->catalogue_ids) {
+                    $catalogueIds = explode(',', $row->catalogue_ids);
+                    $catalogueNames = explode(',', $row->catalogue_names);
+                    $row->product_catalogues = collect($catalogueIds)->map(function ($id, $idx) use ($catalogueNames) {
+                        return (object)[
+                            'id'        => $id,
+                            'languages' => (object)['name' => $catalogueNames[$idx] ?? '']
                         ];
                     });
                 }
 
-                // Add product-specific data
-                if ($objectModel === 'Product') {
-                    $item->review_count = (int) $item->review_count;
-                    $item->review_average = round((float) $item->review_average, 1);
+                // Product-specific
+                if ($objectModel === 'product') {
+                    $row->review_count   = (int) $row->review_count;
+                    $row->review_average = round((float) $row->review_average, 1);
 
-                    if ($item->variant_ids) {
-                        $item->product_variants = collect(explode(',', $item->variant_ids))->map(function ($id) {
-                            return (object) ['id' => $id];
+                    if ($row->variant_ids) {
+                        $row->product_variants = collect(explode(',', $row->variant_ids))->map(function ($id) {
+                            return (object)['id' => $id];
                         });
                     }
                 }
 
-                // Clean up
                 unset(
-                    $item->language_name,
-                    $item->canonical,
-                    $item->meta_title,
-                    $item->meta_description,
-                    $item->language_description,
-                    $item->content,
-                    $item->catalogue_ids,
-                    $item->catalogue_names,
-                    $item->variant_ids,
-                    $item->category_id
+                    $row->language_name,
+                    $row->canonical,
+                    $row->meta_title,
+                    $row->meta_description,
+                    $row->language_description,
+                    $row->content,
+                    $row->catalogue_ids,
+                    $row->catalogue_names,
+                    $row->variant_ids,
+                    $row->category_id
                 );
 
-                return $item;
-            });
+                if (!isset($objectsByCategory[$cid])) {
+                    $objectsByCategory[$cid] = collect();
+                }
+                $objectsByCategory[$cid]->push($row);
+            }
 
-            $result[$catalogue->id] = $processedObjects;
+            // Map lại theo từng catalogue
+            $result = [];
+            foreach ($catalogues as $catalogue) {
+                $recursiveIds = $this->getRecursiveCategoryIds($catalogue->id, $catalogueModel);
+
+                // merge objects thuộc tất cả category con
+                $merged = collect();
+                foreach ($recursiveIds as $cid) {
+                    if (isset($objectsByCategory[$cid])) {
+                        $merged = $merged->merge($objectsByCategory[$cid]);
+                    }
+                }
+
+                $merged = $merged->unique('id');
+
+                // Apply limit từ widget
+                $widget = $widgets->firstWhere('model_id', function ($modelId) use ($catalogue) {
+                    return is_array($modelId) ? in_array($catalogue->id, $modelId) : $modelId == $catalogue->id;
+                });
+                if ($widget) {
+                    $params = $paramsMap->get($widget->keyword, []);
+                    $limit  = $params['limit'] ?? 10;
+                    $merged = $merged->take($limit);
+                }
+
+                $result[$catalogue->id] = $merged->values();
+            }
+
+            return $result;
         }
-
-
-        return $result;
-    }
 
     /**
      * Get objects with relationships for regular widgets

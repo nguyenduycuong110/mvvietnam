@@ -57,7 +57,9 @@ class HomeController extends FrontendController
             ['keyword' => 'news', 'object' => true],
             ['keyword' => 'videos', 'object' => true],
         ], $this->language);
+        
 
+        // dd($widgets['news']);
 
         $slides = $this->slideService->getSlide(
             [SlideEnum::MAIN, SlideEnum::TECHSTAFF, SlideEnum::PARTNER],
