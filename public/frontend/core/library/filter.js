@@ -192,14 +192,28 @@
         $(document).on('click', '.pagination .page-link', function(e){
             let _this = $(this)
             let pageUrl = _this.attr('href');
-            if(!pageUrl) return;
-            console.log(pageUrl);
-            if(pageUrl.includes('/ajax/')){
-                e.preventDefault();
+
+            if(typeof pageUrl !== undefined){
+                 let productCatalogueId = $('input[name="product_catalogue_id[]"]:checked').map(function() {
+                    return $(this).val()
+                }).get();
+                let lectureId = $('input[name="lecture_id[]"]:checked').map(function() {
+                    return $(this).val()
+                }).get();
+
+                const page = pageUrl.replace(/.*page=/, '');
+
+                const filterOptions = {
+                    productCatalogueId: productCatalogueId,
+                    lectureId: lectureId,
+                    page:page
+                }
+
                 $.ajax({
-                    url: pageUrl,
+                    url: 'ajax/product/filter', 
                     type: 'GET',
                     dataType: 'json',
+                    data: filterOptions,
                     success: function(res) {
                         let countProduct = res.countProduct
                         $('.caption strong').html(`${countProduct} kết quả`)
@@ -209,8 +223,13 @@
                         }, 500);
                     }
                 });
-            }
+            }            
+
+           
+            e.preventDefault();
+            return false;
         })
+        
     }
     
 

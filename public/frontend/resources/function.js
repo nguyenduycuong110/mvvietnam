@@ -970,6 +970,7 @@
                 lectureId: lectureId
             }
             
+
             $.ajax({
 				url: 'ajax/product/filter', 
 				type: 'GET', 
@@ -984,10 +985,17 @@
                     HT.skeleton()
 				},
 			});
-          
-            
 
         })
+    }
+
+    HT.filterCoursePaginate = () => {
+        // $(document).on('click', '.ajax-paginate .page-link', function(e){
+            
+        //     console.log(1234);
+            
+        //     return false;
+        // });
     }
 
     HT.changeStatusChildren = () => {
@@ -1043,6 +1051,7 @@
     };
 
 	$(document).ready(function(){
+        HT.filterCoursePaginate()
         HT.forgotPassword()
         HT.changeStatusDropdownMenu()
         HT.changeStatusPass()

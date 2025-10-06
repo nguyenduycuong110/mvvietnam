@@ -9,10 +9,13 @@
                     <div class="filter-item__title">Loại khóa học <span class="count"></span></div>
                     <ul class="filter-list lv1">
                         @foreach($descendantTrees as $key => $descendantTree)
+                        @php
+                            $url = write_url($descendantTree['item']->languages->first()->pivot->canonical);
+                        @endphp
                             <li class="filter-list__item filter-group">
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between mb10">
                                     <div class="lft">
-                                        <input id="product-catalogue-{{ $descendantTree['item']->id }}" type="checkbox" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $descendantTree['item']->id }}">
+                                        <input data-canonical="{{ $url }}" id="product-catalogue-{{ $descendantTree['item']->id }}" type="checkbox" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $descendantTree['item']->id }}">
                                         <label for="product-catalogue-{{ $descendantTree['item']->id }}" style="color:#555555;">
                                             <i class="fa"></i>
                                             {{ $descendantTree['item']->languages->first()->pivot->name  }}
@@ -31,11 +34,12 @@
                                             @php
                                                 $cat_id = $catP['item']->id;
                                                 $cat_name = $catP['item']->languages->first()->pivot->name;
+                                                $cat_canonical = write_url($catP['item']->languages->first()->pivot->canonical);
                                             @endphp
                                             <li class="filter-list__item">
                                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                                     <div class="lft">
-                                                        <input id="product-catalogue-{{ $cat_id }}" type="checkbox" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $cat_id }}">
+                                                        <input id="product-catalogue-{{ $cat_id }}" type="checkbox" data-canonical="{{ $cat_canonical }}" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $cat_id }}">
                                                         <label for="product-catalogue-{{ $cat_id }}">
                                                             <i class="fa"></i>
                                                             {{ $cat_name }}
@@ -54,10 +58,11 @@
                                                             @php
                                                                 $id = $v['item']->id;
                                                                 $name = $v['item']->languages->first()->pivot->name;
+                                                                $canonical = write_url($v['item']->languages->first()->pivot->name);
                                                             @endphp
                                                             <li class="cat-item">
                                                                 <div class="uk-flex uk-flex-middle">
-                                                                    <input id="product-catalogue-{{ $id }}" type="checkbox" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $id }}">
+                                                                    <input id="product-catalogue-{{ $id }}" type="checkbox" data-canonical="{{ $canonical }}" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $id }}">
                                                                     <label for="product-catalogue-{{ $id }}">
                                                                         <i class="fa"></i>
                                                                         {{ $name }}

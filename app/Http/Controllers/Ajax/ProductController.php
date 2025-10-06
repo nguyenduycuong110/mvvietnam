@@ -232,7 +232,7 @@ class ProductController extends Controller
                 HTML;
             }
             $html .= '</div>';
-            $html .= $products->links('pagination::bootstrap-4');
+            $html .= '<div class="ajax-paginate">'.$products->links('pagination::bootstrap-4').'</div>';
         } else {
             $html .= '<div class="no-result">Không có kết quả phù hợp</div>';
         }
