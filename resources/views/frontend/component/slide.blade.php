@@ -10,6 +10,7 @@
         <div class="uk-container uk-container-center">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
+                    {{-- @dd($slides) --}}
                     @foreach($slides[$slideKeyword]['item'] as $key => $val )
                         <div class="swiper-slide">
                             
@@ -23,7 +24,7 @@
                                             </div>
                                             <div class="group-btn">
                                                 <div class="uk-flex uk-flex-middle">
-                                                    <a href="{{ write_url('khoa-hoc') }}" title="" class="btn btn-view wow pulse" data-wow-iteration="3">
+                                                    <a target="_blank" href="{{ $val['canonical'] }}" title="" class="btn btn-view wow pulse" data-wow-iteration="3">
                                                         <span>Xem khóa học</span>
                                                     </a>
                                                     <a href="#panel-contact" title="" class="btn btn-register wow tada" data-wow-delay="1s">
