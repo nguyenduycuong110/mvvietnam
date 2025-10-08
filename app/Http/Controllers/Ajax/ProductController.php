@@ -166,6 +166,20 @@ class ProductController extends Controller
                     $attributes = substr($product->attribute_concat, 0, -1);
                 }
 
+                $runner = 40;
+                $isRunner = in_array($runner, $product->product_catalogues->pluck('id')->toArray());
+
+                $runnerHtml = '';
+                if ($isRunner) {
+                    $runnerHtml = <<<HTML
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: {$progress}%;">
+                                <div class="progress-text" id="progressText">Đang bán chạy</div>
+                            </div>
+                        </div>
+                    HTML;
+}
+
                 $html .= <<<HTML
                     <div class="uk-width-large-1-3 mb20">
                         <div class="product-item">
@@ -193,10 +207,8 @@ class ProductController extends Controller
                                     <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                         {$price['html']}
                                     </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" id="progressFill" style="width: $progress%;">
-                                            <div class="progress-text" id="progressText">Đang bán chạy</div>
-                                        </div>
+                                    <div class="runner">
+                                        {$runnerHtml}
                                     </div>
                                 </div>
                                 <div class="info-lecturer">

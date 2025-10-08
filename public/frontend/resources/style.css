@@ -611,6 +611,9 @@ ul li,ol li{
     border-top-left-radius: 20px;
     border-bottom-right-radius: 20px;
 }
+.product-item .runner{
+    height:20px;
+}
 .product-item .info{
     padding: 10px;
 }

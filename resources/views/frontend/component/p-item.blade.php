@@ -10,6 +10,9 @@
     $lecturer_canonical = $product->lecturer_canonical ??  $product->lecturers->canonical;
     $review['star'] = ($product->review_count == 0) ? '0' : $product->review_average/5*100;
     $progress = rand(85, 99);
+    $runner = 40;
+    $isRunner = in_array($runner, $product->product_catalogues->pluck('id')->toArray());
+
 @endphp
 <div class="product-item">
     <a href="{{ $canonical }}" title="{{ $name }}" class="image img-cover img-zoomin">
@@ -36,10 +39,14 @@
             <div class="uk-flex uk-flex-middle uk-flex-space-between">
                 {!! $price['html'] !!}
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: {{ $progress  }}%;">
-                    <div class="progress-text" id="progressText">Đang bán chạy</div>
+            <div class="runner">
+                @if($isRunner)
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: {{ $progress  }}%;">
+                        <div class="progress-text" id="progressText">Đang bán chạy</div>
+                    </div>
                 </div>
+                @endif
             </div>
         </div>
         <div class="info-lecturer">
