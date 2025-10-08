@@ -251,165 +251,171 @@
                 </div>
             </div>
         @endif
-        <div class="panel-news-video">
-            <div class="uk-container uk-container-center">
-                <div class="wrapper">
-                    <div class="uk-grid uk-grid-medium">
-                        @if(isset($widgets['news']) && !is_null($widgets['news']))
-                            <div class="uk-width-medium-2-3">
-                                @php
-                                    $ct_name = $widgets['news']->name;
-                                @endphp
-                                <div class="news">
-                                    <div class="panel-head">
-                                        <h3 class="heading-2 wow fadeInUp" data-wow-delay="0.1s">
-                                            <span>{{ $ct_name }}</span>
-                                        </h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="uk-grid uk-grid-medium">
-                                            <div class="uk-width-medium-1-2">
-                                                @if(count($widgets['news']->object))
-                                                    @foreach($widgets['news']->object as $key => $val)
-                                                        @if($key == 0)
-                                                            @php
-                                                                $image = $val->image;
-                                                                $name = $val->languages->name;
-                                                                $canonical = write_url($val->languages->canonical);
-                                                                $description = $val->languages->description;
-                                                                $time_post = $val->created_at;
-                                                            @endphp
-                                                            <div class="latest-news bl wow fadeInUp" data-wow-delay="0.2s">
-                                                                <a href="{{ $canonical }}" title="" class="image img-cover img-zoomin">
-                                                                    <img src="{{ $image }}" alt="">
-                                                                </a>
-                                                                <div class="name">
-                                                                    <a href="{{ $canonical }}" title="{{ $name }}">{{ $name }}</a>
-                                                                </div>
-                                                                <div class="time-post">
-                                                                    <img src="/frontend/resources/img/time.svg" alt="">
-                                                                    <span>{{  $time_post }}</span>
-                                                                </div>
-                                                                <div class="description">
-                                                                    {!! $description !!}
-                                                                </div>
-                                                                <p class="rm">
-                                                                    <a href="{{ $canonical }}" title="">Đọc tiếp</a>
-                                                                </p>
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                            <div class="uk-width-medium-1-2">
-                                                @if(count($widgets['news']->object))
-                                                    @php
-                                                        $time = 0.2;
-                                                    @endphp
-                                                    @foreach($widgets['news']->object as $key => $val)
-                                                        @if($key > 0 && $key < 5)
-                                                            @php
-                                                                $image = $val->image;
-                                                                $name = $val->languages->name;
-                                                                $canonical = write_url($val->languages->canonical);
-                                                                $description = $val->languages->description;
-                                                                $time_post = $val->created_at;
-                                                            @endphp
-                                                            <div class="latest-news bl post-item wow fadeInUp" data-wow-delay="{{ $time * ($key + 1)}}s">
-                                                                <div class="left">
-                                                                    <a href="{{ $canonical }}" title="{{ $name }}" class="image img-cover img-zoomin">
+
+        {{-- @dd($widgets['news']) --}}
+        @if(!is_null($widgets['news']))
+            @foreach($widgets['news']->object as $key => $val)
+            <div class="panel-news-video">
+                <div class="uk-container uk-container-center">
+                    <div class="wrapper">
+                        <div class="uk-grid uk-grid-medium">
+                            @if(isset($widgets['news']) && !is_null($widgets['news']))
+                                <div class="uk-width-medium-2-3">
+                                    @php
+                                        $ct_name = $val->languages->name
+                                    @endphp
+                                    <div class="news">
+                                        <div class="panel-head">
+                                            <h3 class="heading-2 wow fadeInUp" data-wow-delay="0.1s">
+                                                <span>{{ $ct_name }}</span>
+                                            </h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="uk-grid uk-grid-medium">
+                                                <div class="uk-width-medium-1-2">
+                                                    @if(!is_null($val->posts))
+                                                        @foreach($val->posts as $keyPost => $valPost)
+                                                            @if($keyPost == 0)
+                                                                @php
+                                                                    $image = $valPost->image;
+                                                                    $name = $valPost->languages[0]->name;
+                                                                    $canonical = write_url($valPost->languages[0]->canonical);
+                                                                    $description = $valPost->languages[0]->description;
+                                                                    $time_post = $valPost->created_at;
+                                                                @endphp
+                                                                <div class="latest-news bl wow fadeInUp" data-wow-delay="0.2s">
+                                                                    <a href="{{ $canonical }}" title="" class="image img-cover img-zoomin">
                                                                         <img src="{{ $image }}" alt="">
                                                                     </a>
-                                                                </div>
-                                                                <div class="right">
                                                                     <div class="name">
                                                                         <a href="{{ $canonical }}" title="{{ $name }}">{{ $name }}</a>
                                                                     </div>
-                                                                    <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                                                                        <div class="time-post">
-                                                                            <img src="/frontend/resources/img/time.svg" alt="">
-                                                                            <span>{{  $time_post }}</span>
+                                                                    <div class="time-post">
+                                                                        <img src="/frontend/resources/img/time.svg" alt="">
+                                                                        <span>{{  $time_post }}</span>
+                                                                    </div>
+                                                                    <div class="description">
+                                                                        {!! $description !!}
+                                                                    </div>
+                                                                    <p class="rm">
+                                                                        <a href="{{ $canonical }}" title="">Đọc tiếp</a>
+                                                                    </p>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                                <div class="uk-width-medium-1-2">
+                                                    @if(!is_null($val->posts))
+                                                        @php
+                                                            $time = 0.2;
+                                                        @endphp
+                                                        @foreach($val->posts as $keyPost => $valPost)
+                                                            @if($keyPost > 0 && $keyPost < 5)
+                                                                @php
+                                                                    $image = $valPost->image;
+                                                                    $name = $valPost->languages[0]->name;
+                                                                    $canonical = write_url($valPost->languages[0]->canonical);
+                                                                    $description = $valPost->languages[0]->description;
+                                                                    $time_post = $valPost->created_at;
+                                                                @endphp
+                                                                <div class="latest-news bl post-item wow fadeInUp" data-wow-delay="{{ $time * ($key + 1)}}s">
+                                                                    <div class="left">
+                                                                        <a href="{{ $canonical }}" title="{{ $name }}" class="image img-cover img-zoomin">
+                                                                            <img src="{{ $image }}" alt="">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="right">
+                                                                        <div class="name">
+                                                                            <a href="{{ $canonical }}" title="{{ $name }}">{{ $name }}</a>
                                                                         </div>
-                                                                        <p class="rm">
-                                                                            <a href="{{ $canonical }}" title="">Đọc tiếp</a>
-                                                                        </p>
+                                                                        <div class="uk-flex uk-flex-middle uk-flex-space-between">
+                                                                            <div class="time-post">
+                                                                                <img src="/frontend/resources/img/time.svg" alt="">
+                                                                                <span>{{  $time_post }}</span>
+                                                                            </div>
+                                                                            <p class="rm">
+                                                                                <a href="{{ $canonical }}" title="">Đọc tiếp</a>
+                                                                            </p>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
-                        {{-- @dd($widgets['videos']) --}}
-                        @if(isset($widgets['videos']) && !is_null($widgets['videos']))
-                            @foreach($widgets['videos']->object as $key => $video)
-                            <div class="uk-width-medium-1-3">
-                                @php
-                                    $ct_name = $widgets['videos']->name;
-                                @endphp
-                                <div class="videos">
-                                    <div class="panel-head">
-                                        <h3 class="heading-2 wow fadeInUp" data-wow-delay="0.1s">
-                                            <span>{{ $ct_name }}</span>
-                                        </h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        @if(count($video->posts))
-                                            <div class="swiper-container">
-                                                <div class="swiper-wrapper">
-                                                    @foreach($video->posts as $key => $val)
-                                                        @if($key > 0) @break @endif
-                                                        @php
-                                                            $image = $val->image;
-                                                            // $video = $val->video;
-                                                        @endphp
-                                                        <div class="swiper-slide">
-                                                            <div class="slide-item video-item video-feature">
-                                                                <a data-video="{{ json_encode($val->video) }}" class="image img-cover wow fadeInUp preview-video" data-wow-delay="0.2s" target="_blank">
-                                                                    <img src="{{ $image }}" alt="">
-                                                                    <button class="btn-play">
-                                                                        <img src="/frontend/resources/img/play.svg" alt="">
-                                                                    </button>
-                                                                </a>
+                            @endif
+                            {{-- @dd($widgets['videos']) --}}
+                            @if(isset($widgets['videos']) && !is_null($widgets['videos']))
+                                @foreach($widgets['videos']->object as $key => $video)
+                                <div class="uk-width-medium-1-3">
+                                    @php
+                                        $ct_name = $widgets['videos']->name;
+                                    @endphp
+                                    <div class="videos">
+                                        <div class="panel-head">
+                                            <h3 class="heading-2 wow fadeInUp" data-wow-delay="0.1s">
+                                                <span>{{ $ct_name }}</span>
+                                            </h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            @if(count($video->posts))
+                                                <div class="swiper-container">
+                                                    <div class="swiper-wrapper">
+                                                        @foreach($video->posts as $key => $val)
+                                                            @if($key > 0) @break @endif
+                                                            @php
+                                                                $image = $val->image;
+                                                                // $video = $val->video;
+                                                            @endphp
+                                                            <div class="swiper-slide">
+                                                                <div class="slide-item video-item video-feature">
+                                                                    <a data-video="{{ json_encode($val->video) }}" class="image img-cover wow fadeInUp preview-video" data-wow-delay="0.2s" target="_blank">
+                                                                        <img src="{{ $image }}" alt="">
+                                                                        <button class="btn-play">
+                                                                            <img src="/frontend/resources/img/play.svg" alt="">
+                                                                        </button>
+                                                                    </a>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                            <ul class="uk-list uk-clearfix thumb-video">
-                                                 @foreach($video->posts as $key => $val)
-                                                    @if($key === 0) @continue @endif
-                                                    @if($key > 4) @break @endif
-                                                    @php
-                                                        $name = $val->languages[0]->name;
-                                                    @endphp
-                                                <li>
-                                                    <div class="thumb-video-item uk-flex uk-flex-middle">
-                                                        <a class="uk-flex uk-flex-middle preview-video" data-video="{{ json_encode($val->video) }}">
-                                                            <span class="image img-cover">
-                                                                <img src="{{ $val->image }}" alt="">
-                                                            </span>
-                                                            <span class="name">{{ $name }}</span>
-                                                        </a>
+                                                        @endforeach
                                                     </div>
-                                                </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
+                                                </div>
+                                                <ul class="uk-list uk-clearfix thumb-video">
+                                                    @foreach($video->posts as $key => $val)
+                                                        @if($key === 0) @continue @endif
+                                                        @if($key > 4) @break @endif
+                                                        @php
+                                                            $name = $val->languages[0]->name;
+                                                        @endphp
+                                                    <li>
+                                                        <div class="thumb-video-item uk-flex uk-flex-middle">
+                                                            <a class="uk-flex uk-flex-middle preview-video" data-video="{{ json_encode($val->video) }}">
+                                                                <span class="image img-cover">
+                                                                    <img src="{{ $val->image }}" alt="">
+                                                                </span>
+                                                                <span class="name">{{ $name }}</span>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            @endforeach
-                        @endif
+                                @endforeach
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            @endforeach
+        @endif
         @php
             $slideKeyword = App\Enums\SlideEnum::PARTNER;
         @endphp
