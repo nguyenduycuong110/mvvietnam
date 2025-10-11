@@ -15,7 +15,14 @@
                             <li class="filter-list__item filter-group">
                                 <div class="uk-flex uk-flex-middle uk-flex-space-between mb10">
                                     <div class="lft">
-                                        <input data-canonical="{{ $url }}" id="product-catalogue-{{ $descendantTree['item']->id }}" type="checkbox" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $descendantTree['item']->id }}">
+                                        <input 
+                                            data-canonical="{{ $url }}" 
+                                            id="product-catalogue-{{ $descendantTree['item']->id }}" 
+                                            type="checkbox" class="input-value p-filter" name="product_catalogue_id[]" 
+                                            value="{{ $descendantTree['item']->id }}
+                                            @checked($descendantTree['item']->id === $productCatalogue->id)
+                                            
+                                        ">
                                         <label for="product-catalogue-{{ $descendantTree['item']->id }}" style="color:#555555;">
                                             <i class="fa"></i>
                                             {{ $descendantTree['item']->languages->first()->pivot->name  }}
@@ -39,7 +46,15 @@
                                             <li class="filter-list__item">
                                                 <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                                     <div class="lft">
-                                                        <input id="product-catalogue-{{ $cat_id }}" type="checkbox" data-canonical="{{ $cat_canonical }}" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $cat_id }}">
+                                                        <input 
+                                                            id="product-catalogue-{{ $cat_id }}" 
+                                                            type="checkbox" 
+                                                            data-canonical="{{ $cat_canonical }}" 
+                                                            class="input-value p-filter" 
+                                                            name="product_catalogue_id[]" 
+                                                            value="{{ $cat_id }}"
+                                                            @checked($cat_id === $productCatalogue->id)
+                                                        >
                                                         <label for="product-catalogue-{{ $cat_id }}">
                                                             <i class="fa"></i>
                                                             {{ $cat_name }}
@@ -62,7 +77,15 @@
                                                             @endphp
                                                             <li class="cat-item">
                                                                 <div class="uk-flex uk-flex-middle">
-                                                                    <input id="product-catalogue-{{ $id }}" type="checkbox" data-canonical="{{ $canonical }}" class="input-value p-filter" name="product_catalogue_id[]" value="{{ $id }}">
+                                                                    <input 
+                                                                        id="product-catalogue-{{ $id }}" 
+                                                                        type="checkbox" 
+                                                                        data-canonical="{{ $canonical }}" 
+                                                                        class="input-value p-filter" 
+                                                                        name="product_catalogue_id[]" 
+                                                                        value="{{ $id }}"
+                                                                        @checked($id === $productCatalogue->id)
+                                                                    >
                                                                     <label for="product-catalogue-{{ $id }}">
                                                                         <i class="fa"></i>
                                                                         {{ $name }}

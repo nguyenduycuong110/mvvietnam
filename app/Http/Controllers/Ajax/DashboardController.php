@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Language;
+use App\Models\ProductCatalogue;
 use Illuminate\Support\Str;
 use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
+use Illuminate\Support\Facades\DB;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
@@ -196,31 +199,141 @@ class DashboardController extends Controller
         return response()->json($object); 
     }
 
-    public function findProductObject(Request $request){
+    // public function findProductObject(Request $request){
+    //     $html = '';
+    //     $productCatalogueId = $request->input('product_catalogue_id');
+    //     if(!$productCatalogueId){
+    //         return response()->json(['html' => $html]);
+    //     }
+    //     $class = loadClass('Product');
+    //     $products = $class->getProductByProductCatalogue($productCatalogueId, $this->language);
+    //     // dd($products);
+    //     $productIds = $products->pluck('id')->all();
+    //     if(!count($productIds) &&!is_array($productIds)){
+    //         return response()->json(['html' => $html]);
+    //     }
+    //     $promotions = $this->promotionRepository->findByProduct($productIds);
+    //     if($promotions->isNotEmpty()){
+    //             $promotionMap = $promotions->keyBy('product_id');
+    //             foreach($products as $index => $product){
+    //                 if($promotionMap->has($product->id)){
+    //                     $products[$index]->promotions = $promotionMap->get($product->id);
+    //                 }
+    //             }
+    //         }
+    //     $html = view('frontend.component.product-item-switch', ['products' => $products])->render();
+    //     return response()->json(['html' => $html]);
+    // }
+    
+    public function findProductObject(Request $request)
+    {
         $html = '';
-        $productCatalogueId = $request->input('product_catalogue_id');
-        if(!$productCatalogueId){
+        $productCatalogueIds = $request->input('product_catalogue_id', []);
+
+        // luôn có 2 id, nếu không có thì trả rỗng
+        if (count($productCatalogueIds) < 2) {
             return response()->json(['html' => $html]);
         }
-        $class = loadClass('Product');
-        $products = $class->getProductByProductCatalogue($productCatalogueId, $this->language);
+
+        // Lấy thông tin lft/rgt của 2 danh mục
+        $productCatalogues = ProductCatalogue::whereIn('id', $productCatalogueIds)
+            ->select('id', 'lft', 'rgt')
+            ->get()
+            ->keyBy('id');
+
+        // [0] là danh mục phụ, [1] là danh mục chính
+        $subRoot  = $productCatalogues->get($productCatalogueIds[0]);
+        $mainRoot = $productCatalogues->get($productCatalogueIds[1]);
+
+        if (!$subRoot || !$mainRoot) {
+            return response()->json(['html' => $html]);
+        }
+
+        // Lấy tất cả danh mục con của từng cây
+        $subTree = ProductCatalogue::whereBetween('lft', [$subRoot->lft, $subRoot->rgt])
+            ->pluck('id')
+            ->toArray();
+
+        $mainTree = ProductCatalogue::whereBetween('lft', [$mainRoot->lft, $mainRoot->rgt])
+            ->pluck('id')
+            ->toArray();
+
+        $products = Product::query()
+            ->withCount(['reviews as review_count'])
+            ->withAvg('reviews as review_average', 'score')
+            ->join('product_language as tb2', 'tb2.product_id', '=', 'products.id')
+            ->leftJoin('lecturers as tb3', 'tb3.id', '=', 'products.lecturer_id')
+            ->select([
+                'products.id',
+                'products.price',
+                'products.image',
+                'products.total_lesson',
+                'products.duration',
+                'tb2.name',
+                'tb2.canonical',
+                'tb2.description',
+                'tb2.content',
+                'tb2.meta_title',
+                'tb3.name as lecturer_name',
+                'tb3.image as lecturer_avatar',
+                'tb3.canonical as lecturer_canonical',
+            ])
+            ->where('tb2.language_id', $this->language)
+            // nằm trong cây chính
+            ->whereIn('products.id', function ($q) use ($mainTree) {
+                $q->select('product_id')
+                    ->from('product_catalogue_product')
+                    ->whereIn('product_catalogue_id', $mainTree);
+            })
+            // đồng thời nằm trong cây phụ
+            ->whereIn('products.id', function ($q) use ($subTree) {
+                $q->select('product_id')
+                    ->from('product_catalogue_product')
+                    ->whereIn('product_catalogue_id', $subTree);
+            })
+            ->groupBy([
+                'products.id',
+                'products.price',
+                'products.image',
+                'products.total_lesson',
+                'products.duration',
+                'tb2.name',
+                'tb2.canonical',
+                'tb2.description',
+                'tb2.content',
+                'tb2.meta_title',
+                'tb3.name',
+                'tb3.image',
+                'tb3.canonical',
+            ])
+        ->get();
+        
+
+        // Không có sản phẩm → trả rỗng
+        if ($products->isEmpty()) {
+            return response()->json(['html' => $html]);
+        }
+
+        // Thêm khuyến mãi nếu có
         $productIds = $products->pluck('id')->all();
-        if(!count($productIds) &&!is_array($productIds)){
-            return response()->json(['html' => $html]);
-        }
         $promotions = $this->promotionRepository->findByProduct($productIds);
-        if($promotions->isNotEmpty()){
-                $promotionMap = $promotions->keyBy('product_id');
-                foreach($products as $index => $product){
-                    if($promotionMap->has($product->id)){
-                        $products[$index]->promotions = $promotionMap->get($product->id);
-                    }
+
+        if ($promotions->isNotEmpty()) {
+            $promotionMap = $promotions->keyBy('product_id');
+            foreach ($products as $index => $product) {
+                if ($promotionMap->has($product->id)) {
+                    $products[$index]->promotions = $promotionMap->get($product->id);
                 }
             }
-        $html = view('frontend.component.product-item-switch', ['products' => $products])->render();
+        }
+
+        // Render HTML
+        $html = view('frontend.component.product-item-switch', [
+            'products' => $products
+        ])->render();
+
         return response()->json(['html' => $html]);
     }
-    
 
 
 }

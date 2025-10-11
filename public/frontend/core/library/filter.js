@@ -189,7 +189,7 @@
     }
 
     HT.loadHtmlPagination = () => {
-        $(document).on('click', '.pagination .page-link', function(e){
+        $(document).on('click', '.ajax-paginate .pagination .page-link', function(e){
             let _this = $(this)
             let pageUrl = _this.attr('href');
 
