@@ -20,7 +20,7 @@
                                             id="product-catalogue-{{ $descendantTree['item']->id }}" 
                                             type="checkbox" class="input-value p-filter" name="product_catalogue_id[]" 
                                             value="{{ $descendantTree['item']->id }}
-                                            @checked($descendantTree['item']->id === $productCatalogue->id)
+                                            @checked(isset($productCatalogue) && $descendantTree['item']->id === $productCatalogue->id)
                                             
                                         ">
                                         <label for="product-catalogue-{{ $descendantTree['item']->id }}" style="color:#555555;">
@@ -53,7 +53,7 @@
                                                             class="input-value p-filter" 
                                                             name="product_catalogue_id[]" 
                                                             value="{{ $cat_id }}"
-                                                            @checked($cat_id === $productCatalogue->id)
+                                                            @checked(isset($productCatalogue) &&  $cat_id === $productCatalogue->id)
                                                         >
                                                         <label for="product-catalogue-{{ $cat_id }}">
                                                             <i class="fa"></i>
@@ -84,7 +84,7 @@
                                                                         class="input-value p-filter" 
                                                                         name="product_catalogue_id[]" 
                                                                         value="{{ $id }}"
-                                                                        @checked($id === $productCatalogue->id)
+                                                                        @checked(isset($productCatalogue) &&  $id === $productCatalogue->id)
                                                                     >
                                                                     <label for="product-catalogue-{{ $id }}">
                                                                         <i class="fa"></i>
