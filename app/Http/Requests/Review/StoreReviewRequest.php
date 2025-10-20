@@ -26,7 +26,7 @@ class StoreReviewRequest extends FormRequest
             'reviewable_id' => 'gt:0',
             'score' => 'gt:0',
             'gender' => 'required|not_in:0|in:Nam,Nữ',
-            'image' => 'required|max:5120'
+            // 'image' => 'required|max:5120'
         ];
     }
 
