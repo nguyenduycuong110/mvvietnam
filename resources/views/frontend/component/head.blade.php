@@ -17,7 +17,7 @@
 <!-- for Facebook -->
 <meta property="og:title" content="{{ $seo['meta_title'] }}" />
 <meta property="og:type" content="website" />
-<meta property="og:image" content="{{ $seo['meta_image'] }}" />
+<meta property="og:image" content="{{ asset($seo['meta_image']) }}" />
 <meta property="og:url" content="{{ $seo['canonical'] }}" />		
 <meta property="og:description" content="{{ $seo['meta_description'] }}" />
 <meta property="og:site_name" content="" />
@@ -26,7 +26,7 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="{{ $seo['meta_title'] }}" />
 <meta name="twitter:description" content="{{ $seo['meta_description'] }}" />
-<meta name="twitter:image" content="{{ $seo['meta_image'] }}" />
+<meta name="twitter:image" content="{{ asset($seo['meta_image']) }}" />
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
