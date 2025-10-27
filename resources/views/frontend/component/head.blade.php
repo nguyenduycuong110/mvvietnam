@@ -10,7 +10,7 @@
 <link rel="icon" href="{{ $system['homepage_favicon'] }}" type="image/png" sizes="30x30">
 <!-- GOOGLE -->
 <title>{{ $seo['meta_title'] }}</title>
-<meta name="description"  content="{{ $seo['meta_description'] }}" />
+<meta name="description"  content="{!! $seo['meta_description'] !!}" />
 <meta name="keyword"  content="{{ $seo['meta_keyword'] }}" />
 <link rel="canonical" href="{{ $seo['canonical'] }}" />		
 <meta property="og:locale" content="vi_VN" />
@@ -19,13 +19,13 @@
 <meta property="og:type" content="website" />
 <meta property="og:image" content="{{ asset($seo['meta_image']) }}" />
 <meta property="og:url" content="{{ $seo['canonical'] }}" />		
-<meta property="og:description" content="{{ $seo['meta_description'] }}" />
+<meta property="og:description" content="{!! $seo['meta_description'] !!}" />
 <meta property="og:site_name" content="" />
 <meta property="fb:admins" content=""/>
 <meta property="fb:app_id" content="" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="{{ $seo['meta_title'] }}" />
-<meta name="twitter:description" content="{{ $seo['meta_description'] }}" />
+<meta name="twitter:description" content="{!! $seo['meta_description'] !!}" />
 <meta name="twitter:image" content="{{ asset($seo['meta_image']) }}" />
 
 
