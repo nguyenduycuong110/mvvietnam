@@ -4630,3 +4630,7 @@ button{
 #modal-register .uk-flex{
     justify-content: right;
 }
+
+.post-content  .content a{
+    color:blue !important;
+}

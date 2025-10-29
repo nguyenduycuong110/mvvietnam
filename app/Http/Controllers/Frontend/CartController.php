@@ -83,35 +83,22 @@ class CartController extends FrontendController
     public function checkout(){
 
         $provinces = $this->provinceRepository->all();
-
         $carts = Cart::instance('shopping')->content();
-
         $carts = $this->cartService->remakeCart($carts);
-
         $cartCaculate = $this->cartService->reCaculateCart();
-
         $cartPromotion = $this->cartService->cartPromotion($cartCaculate['cartTotal']);
-
         $discountTotalProduct = 0;
-
         foreach ($carts as $cart) {
             $discountTotalProduct += ($cart->priceOriginal - $cart->price) * $cart->qty;
         }
- 
         $buyer = $this->getBuyer();
-
         $shipping = $this->cartService->totalShipping($buyer);
-
         $totalVoucherProduct = $this->cartService->totalDiscountVoucher($carts);
-
         $voucher= Session::get('voucher') ?? null;
-
         $allVoucherTotal = null;
-
         if(!is_null($shipping) && !is_null($buyer)){
             $allVoucherTotal = $this->voucherService->listVoucher(($cartCaculate['cartTotal'] - $totalVoucherProduct - $cartPromotion['discount']), $shipping['totalShippingCost'], $carts);
         }
-
         $seo = [
             'meta_title' => 'Trang thanh toán đơn hàng',
             'meta_keyword' => '',
@@ -119,16 +106,9 @@ class CartController extends FrontendController
             'meta_image' => '',
             'canonical' => write_url('thanh-toan', TRUE, TRUE),
         ];
-
         $system = $this->system;
-
         $config = $this->config();
-
-        if(Agent::isMobile()){
-            $template = 'mobile.cart.index';
-        }else{
-            $template = 'frontend.cart.index';
-        }
+        $template = 'frontend.cart.index';
 
         return view($template, compact(
             'config',
