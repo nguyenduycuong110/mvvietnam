@@ -51,7 +51,7 @@
         <div class="uk-container uk-container-center">
             <div class="uk-flex uk-flex-middle uk-flex-space-between">
                 <a href="" title="Logo" class="image img-cover logo wow fadeInUp" data-wow-delay="0.2s">
-                    <img src="/userfiles/image/logo/fda2321c2a05e3817530300b48691773fa26fd98.png" alt="logo">
+                    <img src="{{ $system['homepage_logo'] }}" alt="logo">
                     <span>{!! $system['homepage_brand'] !!}</span>
                 </a>
                 @include('frontend.component.navigation')
