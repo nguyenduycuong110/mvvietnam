@@ -152,8 +152,8 @@ class postController extends FrontendController
             "description" => $description,
             "image" => $image,
             "url" => $canonical,
-            "datePublished" => $post->created_at->toIso8601String(),
-            "dateModified" => $post->updated_at->toIso8601String(),
+           "datePublished" => optional($post->created_at)->toIso8601String(),
+            "dateModified" => optional($post->updated_at ?? $post->created_at)->toIso8601String(),
             "author" => [
                 "@type" => "Person",
                 "name" => "Tác giả"
