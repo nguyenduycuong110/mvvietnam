@@ -212,91 +212,70 @@ class ProductCatalogueController extends FrontendController
 
     private function schema($productCatalogue, $products, $breadcrumb)
     {
-
         $cat_name = $productCatalogue->languages->first()->pivot->name;
-
         $cat_canonical = write_url($productCatalogue->languages->first()->pivot->canonical);
-
         $cat_description = strip_tags($productCatalogue->languages->first()->pivot->description);
 
-        $totalProducts = $products->total();
+        // ========= BREADCRUMB ==========
+        $breadcrumbItems = [];
+        $breadcrumbItems[] = [
+            "@type" => "ListItem",
+            "position" => 1,
+            "name" => "Trang chủ",
+            "item" => config('app.url')
+        ];
 
-        $itemListElements = '';
-
-        $position = 1;
-
-        foreach ($products as $product) {
-            $image = $product->image;
-            $name = $product->languages->first()->pivot->name;
-            $canonical = write_url($product->languages->first()->pivot->canonical);
-            $itemListElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $position,
-                    \"item\": {
-                        \"@type\": \"Product\",
-                        \"name\": \"" . $name . "\",
-                        \"url\": \"" . $canonical . "\",
-                        \"image\": \"" . $image . "\"
-                    }
-                },";
-            $position++;
+        $pos = 2;
+        foreach ($breadcrumb as $item) {
+            $breadcrumbItems[] = [
+                "@type" => "ListItem",
+                "position" => $pos,
+                "name" => $item->languages->first()->pivot->name,
+                "item" => write_url($item->languages->first()->pivot->canonical)
+            ];
+            $pos++;
         }
 
-        $itemListElements = rtrim($itemListElements, ',');
+        $breadcrumbSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "BreadcrumbList",
+            "itemListElement" => $breadcrumbItems
+        ];
 
-        $itemBreadcrumbElements = '';
-
-        $positionBreadcrumb = 2;
-
-        foreach ($breadcrumb as $key => $item) {
-            $name = $item->languages->first()->pivot->name;
-            $canonical = write_url($item->languages->first()->pivot->canonical);
-            $itemBreadcrumbElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $positionBreadcrumb,
-                    \"name\": \"" . $name . "\",
-                    \"item\": \"" . $canonical . "\",
-                },";
-            $positionBreadcrumb++;
-        }
-
-        $itemBreadcrumbElements = rtrim($itemBreadcrumbElements, ',');
-
-        $schema = "<script type='application/ld+json'>
-        [
-            {
-                \"@context\": \"https://schema.org\",
-                \"@type\": \"BreadcrumbList\",
-                \"itemListElement\": [
-                    {
-                        \"@type\": \"ListItem\",
-                        \"position\": 1,
-                        \"name\": \"Trang chủ\",
-                        \"item\": \"" . config('app.url') . "\"
-                    }
-                    $itemBreadcrumbElements
+        // ========= PRODUCT LIST ==========
+        $productItems = [];
+        $pos = 1;
+        foreach ($products as $p) {
+            $productItems[] = [
+                "@type" => "ListItem",
+                "position" => $pos,
+                "item" => [
+                    "@type" => "Product",
+                    "name" => $p->languages->first()->pivot->name,
+                    "url" => write_url($p->languages->first()->pivot->canonical),
+                    "image" => $p->image
                 ]
-            },
-            {
-                \"@context\": \"https://schema.org\",
-                \"@type\": \"CollectionPage\",
-                \"name\": \"" . $cat_name . "\",
-                \"description\": \"" . $cat_description . "\",
-                \"url\": \"" . $cat_canonical . "\",
-                \"mainEntity\": {
-                    \"@type\": \"ItemList\",
-                    \"name\": \"" . $cat_name . "\",
-                    \"numberOfItems\": $totalProducts,
-                    \"itemListElement\": [
-                        $itemListElements
-                    ]
-                }
-            }
-        ]
-        </script>";
-        return $schema;
+            ];
+            $pos++;
+        }
+
+        $collectionSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "CollectionPage",
+            "name" => $cat_name,
+            "description" => $cat_description,
+            "url" => $cat_canonical,
+            "mainEntity" => [
+                "@type" => "ItemList",
+                "name" => $cat_name,
+                "numberOfItems" => $products->total(),
+                "itemListElement" => $productItems
+            ]
+        ];
+
+        $json = json_encode([$breadcrumbSchema, $collectionSchema], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        return "<script type='application/ld+json'>$json</script>";
     }
 
     private function config()
