@@ -216,7 +216,7 @@ class ProductCatalogueController extends FrontendController
         $cat_canonical = write_url($productCatalogue->languages->first()->pivot->canonical);
         $cat_description = strip_tags($productCatalogue->languages->first()->pivot->description);
 
-        // ========= BREADCRUMB ==========
+        /** ----------- BREADCRUMB ----------- **/
         $breadcrumbItems = [];
         $breadcrumbItems[] = [
             "@type" => "ListItem",
@@ -242,16 +242,22 @@ class ProductCatalogueController extends FrontendController
             "itemListElement" => $breadcrumbItems
         ];
 
-        // ========= PRODUCT LIST ==========
-        $productItems = [];
+        /** ----------- COURSE LIST ----------- **/
+        $courseItems = [];
         $pos = 1;
         foreach ($products as $p) {
-            $productItems[] = [
+            $courseItems[] = [
                 "@type" => "ListItem",
                 "position" => $pos,
                 "item" => [
-                    "@type" => "Product",
+                    "@type" => "Course",
                     "name" => $p->languages->first()->pivot->name,
+                    "description" => strip_tags($p->languages->first()->pivot->description ?? ''),
+                    "provider" => [
+                        "@type" => "Organization",
+                        "name" => "OM'E",
+                        "sameAs" => config('app.url')
+                    ],
                     "url" => write_url($p->languages->first()->pivot->canonical),
                     "image" => $p->image
                 ]
@@ -259,7 +265,8 @@ class ProductCatalogueController extends FrontendController
             $pos++;
         }
 
-        $collectionSchema = [
+        /** ----------- PAGE SCHEMA ----------- **/
+        $pageSchema = [
             "@context" => "https://schema.org",
             "@type" => "CollectionPage",
             "name" => $cat_name,
@@ -267,13 +274,12 @@ class ProductCatalogueController extends FrontendController
             "url" => $cat_canonical,
             "mainEntity" => [
                 "@type" => "ItemList",
-                "name" => $cat_name,
-                "numberOfItems" => $products->total(),
-                "itemListElement" => $productItems
+                "itemListElement" => $courseItems
             ]
         ];
 
-        $json = json_encode([$breadcrumbSchema, $collectionSchema], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        /** ----------- JSON ENCODE ----------- **/
+        $json = json_encode([$breadcrumbSchema, $pageSchema], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         return "<script type='application/ld+json'>$json</script>";
     }
