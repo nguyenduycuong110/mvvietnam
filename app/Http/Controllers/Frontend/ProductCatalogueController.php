@@ -265,15 +265,17 @@ class ProductCatalogueController extends FrontendController
         $itemBreadcrumbElements = rtrim($itemBreadcrumbElements, ',');
 
         $schema = "<script type='application/ld+json'>
+        [
             {
+                \"@context\": \"https://schema.org\",
                 \"@type\": \"BreadcrumbList\",
                 \"itemListElement\": [
                     {
                         \"@type\": \"ListItem\",
                         \"position\": 1,
-                        \"name\": \" Trang chủ  \",
-                        \"item\": \" " . config('app.url') . " \"
-                    },
+                        \"name\": \"Trang chủ\",
+                        \"item\": \"" . config('app.url') . "\"
+                    }
                     $itemBreadcrumbElements
                 ]
             },
@@ -281,18 +283,19 @@ class ProductCatalogueController extends FrontendController
                 \"@context\": \"https://schema.org\",
                 \"@type\": \"CollectionPage\",
                 \"name\": \"" . $cat_name . "\",
-                \"description\": \" " . $cat_description . " \",
+                \"description\": \"" . $cat_description . "\",
                 \"url\": \"" . $cat_canonical . "\",
                 \"mainEntity\": {
                     \"@type\": \"ItemList\",
-                    \"name\": \" " . $cat_name . " \",
+                    \"name\": \"" . $cat_name . "\",
                     \"numberOfItems\": $totalProducts,
                     \"itemListElement\": [
                         $itemListElements
                     ]
                 }
             }
-            </script>";
+        ]
+        </script>";
         return $schema;
     }
 

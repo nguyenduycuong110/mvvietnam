@@ -111,97 +111,73 @@ class postController extends FrontendController
         ));
     }
 
-    private function schema($post, $postCatalogue, $breadcrumb){
-
+    private function schema($post, $postCatalogue, $breadcrumb)
+    {
         $image = $post->image;
-
         $name = $post->languages->first()->pivot->name;
-
         $description = strip_tags($post->languages->first()->pivot->description);
-
         $canonical = write_url($post->languages->first()->pivot->canonical);
 
-        $itemBreadcrumbElements = '';
+        /* ---------------- BREADCRUMB ---------------- */
+        $breadcrumbItems = [];
+        $breadcrumbItems[] = [
+            "@type" => "ListItem",
+            "position" => 1,
+            "name" => "Trang chủ",
+            "item" => config('app.url')
+        ];
 
-        $positionBreadcrumb = 2;
-
-        foreach ($breadcrumb as $key => $item) {
-
-            $name = $item->languages->first()->pivot->name;
-
-            $canonical = write_url($item->languages->first()->pivot->canonical);
-
-            $itemBreadcrumbElements .= "
-                {
-                    \"@type\": \"ListItem\",
-                    \"position\": $positionBreadcrumb,
-                    \"name\": \"" . $name . "\",
-                    \"item\": \"" . $canonical . "\",
-                },";
-            $positionBreadcrumb++;
+        $pos = 2;
+        foreach ($breadcrumb as $item) {
+            $breadcrumbItems[] = [
+                "@type" => "ListItem",
+                "position" => $pos,
+                "name" => $item->languages->first()->pivot->name,
+                "item" => write_url($item->languages->first()->pivot->canonical)
+            ];
+            $pos++;
         }
 
-        $itemBreadcrumbElements = rtrim($itemBreadcrumbElements, ',');
+        $breadcrumbSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "BreadcrumbList",
+            "itemListElement" => $breadcrumbItems
+        ];
 
-        $schema = "
-            <script type=\"application/ld+json\">
-                {
-                    \"@type\": \"BreadcrumbList\",
-                    \"itemListElement\": [
-                        {
-                            \"@type\": \"ListItem\",
-                            \"position\": 1,
-                            \"name\": \" Trang chủ  \",
-                            \"item\": \" ". config('app.url') . " \"
-                        },
-                        $itemBreadcrumbElements
-                    ]
-                },
-                {
-                    \"@context\": \"https://schema.org\",
-                    \"@type\": \"BlogPosting\",
-                    \"headline\": \" " . $name .  " \",
-                    \"description\": \"  " . $description .  "  \",
-                    \"image\": \"  " . $image .  "  \",
-                    \"url\": \"  " . $canonical .  "  \",
-                    \"datePublished\": \"  " . convertDateTime($post->created_at, 'd-m-y') .  "  \",
-                    \"dateModified\": \"  " . convertDateTime($post->created_at, 'd-m-y') .  "  \",
-                    \"author\": [
-                        \"@type\": \"Person\",
-                        \"name\": \"\",
-                        \"url\": \"\",
-                    ],
-                    \"publisher\": [
-                        \"@type\": \"Organization\",
-                        \"name\": \" An Hưng  \",
-                        \"logo\": [
-                            \"@type\": \"ImageObject\",
-                            \"url\": \"   \",
-                        ],
-                    ],
-                    \"mainEntityOfPage\": [
-                        \"@type\": \"Organization\",
-                        \"@id\": \" " . $canonical . " \",
-                    ],
-                    \"articleSection\": \"  " . $postCatalogue->languages->first()->pivot->name .  "  \",
-                    \" keywords \": \"  \",
-                    \" timeRequired \": \"  \",
-                    \"about\": [
-                        \"@type\": \"Thing\",
-                        \"name\": \" \",
-                    ],
-                    \"mentions\": [
-                        {
-                            \"@type\": \"Product\",
-                            \"name\": \" \",
-                        }
-                    ],
-                }
-            </script>
-        ";
-        return $schema;
+        /* ---------------- BLOG POSTING ---------------- */
+        $blogSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "BlogPosting",
+            "headline" => $name,
+            "description" => $description,
+            "image" => $image,
+            "url" => $canonical,
+            "datePublished" => $post->created_at->toIso8601String(),
+            "dateModified" => $post->updated_at->toIso8601String(),
+            "author" => [
+                "@type" => "Person",
+                "name" => "Tác giả"
+            ],
+            "publisher" => [
+                "@type" => "Organization",
+                "name" => "An Hưng",
+                "logo" => [
+                    "@type" => "ImageObject",
+                    "url" => config('app.url') . "/logo.png"
+                ]
+            ],
+            "mainEntityOfPage" => [
+                "@type" => "WebPage",
+                "@id" => $canonical
+            ],
+            "articleSection" => $postCatalogue->languages->first()->pivot->name,
+            "keywords" => "",
+        ];
 
-    } 
+        $schemas = json_encode([$breadcrumbSchema, $blogSchema], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+        return "<script type=\"application/ld+json\">$schemas</script>";
+    }
 
     private function config(){
         return [
