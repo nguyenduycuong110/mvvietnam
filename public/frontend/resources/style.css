@@ -2393,7 +2393,7 @@ button{
 }
 .post-container .content img{
     height: auto !important;
-    width: auto !important;
+    width: 100% !important;
     display: flex;
     margin-left: auto;
     margin-right: auto;
@@ -4641,13 +4641,6 @@ figure {
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-figure:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
 }
 
 figure img {
