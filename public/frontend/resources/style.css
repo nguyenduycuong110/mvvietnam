@@ -4634,3 +4634,34 @@ button{
 .post-content  .content a{
     color:blue !important;
 }
+
+figure {
+    margin: 25px 0;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+figure:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+}
+
+figure img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+figure figcaption {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    background: #fafafa;
+    border-top: 1px solid #eee;
+}
