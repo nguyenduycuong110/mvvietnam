@@ -133,6 +133,12 @@ class ProductController extends FrontendController
         $promotionLeft = $this->promotionLeft($product) ?? null;
 
         $productCatalogue = $this->productCatalogueRepository->getProductCatalogueById($product->product_catalogue_id, $this->language);
+        
+        // Combine products with promotions for similar products section
+        if($productCatalogue && $productCatalogue->products && $productCatalogue->products->count() > 0){
+            $productIds = $productCatalogue->products->pluck('id')->toArray();
+            $productCatalogue->products = $this->productService->combineProductAndPromotion($productIds, $productCatalogue->products);
+        }
 
         $parent = null;
 
