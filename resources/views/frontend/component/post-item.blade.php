@@ -1,8 +1,11 @@
 @php
-    $name = $post->languages[0]->name;
-    $canonical = write_url($post->languages[0]->canonical);
+    $name = !empty($post->languages) && $post->languages->count() > 0 
+        ? ($post->languages->first()->pivot->name ?? $post->languages->first()->name ?? $post->name ?? '') 
+        : ($post->name ?? '');
+    $canonical = !empty($post->languages) && $post->languages->count() > 0 
+        ? write_url($post->languages->first()->pivot->canonical ?? $post->languages->first()->canonical ?? '') 
+        : write_url($post->canonical ?? '');
     $image = thumb(image($post->image), 600, 400);
-    $price = getPrice($product);
 @endphp
 
 <div class="post-item">

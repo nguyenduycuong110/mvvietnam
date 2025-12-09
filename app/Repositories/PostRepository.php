@@ -53,4 +53,28 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         ->find($id);
     }
 
+    public function getRelated($limit = 6, $postCatalogueId = 0, $postId = 0, $languageId = 0){
+        return $this->model->select([
+                'posts.id',
+                'posts.post_catalogue_id',
+                'posts.image',
+                'posts.created_at',
+                'posts.viewed',
+                'tb2.name',
+                'tb2.canonical',
+                'tb2.description',
+            ])
+            ->join('post_language as tb2', 'tb2.post_id', '=', 'posts.id')
+            ->where('posts.publish', 2)
+            ->where('posts.post_catalogue_id', $postCatalogueId)
+            ->where('posts.id', '!=', $postId)
+            ->where('tb2.language_id', '=', $languageId)
+            ->with(['languages' => function($query) use ($languageId) {
+                $query->where('language_id', $languageId);
+            }])
+            ->orderBy('posts.id', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
 }

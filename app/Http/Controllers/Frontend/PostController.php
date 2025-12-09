@@ -97,6 +97,9 @@ class postController extends FrontendController
         $contentWithToc = TableOfContents::injectIds($content, $items);
         // dd($contentWithToc);
 
+        // Lấy 6 bài viết liên quan
+        $relatedPosts = $this->postRepository->getRelated(6, $post->post_catalogue_id, $post->id, $this->language);
+
         return view($template, compact(
             'config',
             'seo',
@@ -107,7 +110,8 @@ class postController extends FrontendController
             'asidePost',
             'widgets',
             'schema',
-            'contentWithToc'
+            'contentWithToc',
+            'relatedPosts'
         ));
     }
 
