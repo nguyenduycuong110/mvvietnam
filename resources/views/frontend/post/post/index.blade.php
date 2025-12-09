@@ -36,19 +36,19 @@
                         </div>
                     </div>
                     @if(isset($relatedPosts) && count($relatedPosts) > 0)
-                    <div class="post-related mt30 mb30">
+                    <div class="post-related mt30 mb30" style="margin-top: 40px; margin-bottom: 40px;">
                         <div class="panel-product">
                             <div class="main-heading">
                                 <div class="panel-head">
                                     <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                                        <h2 class="heading-2" style="text-transform:uppercase"><span>Bài viết liên quan</span></h2>
+                                        <h2 class="heading-2" style="text-transform:uppercase; margin-bottom: 20px;"><span>Bài viết liên quan</span></h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel-body list-post">
-                                <div class="post-related-wrapper uk-grid uk-grid-medium">
+                            <div class="panel-body list-post" style="padding-top: 20px;">
+                                <div class="post-related-wrapper uk-grid uk-grid-medium uk-grid-match" data-uk-grid>
                                     @foreach($relatedPosts as $index => $relatedPost)
-                                        <div class="uk-width-1-1 uk-width-small-1-1 uk-width-medium-1-2 uk-width-large-1-3">
+                                        <div class="uk-width-1-1 uk-width-small-1-1 uk-width-medium-1-2 uk-width-large-1-3" style="margin-bottom: 30px;">
                                             @include('frontend.component.post-item', ['post' => $relatedPost])
                                         </div>
                                     @endforeach
