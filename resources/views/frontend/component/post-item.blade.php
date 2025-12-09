@@ -10,11 +10,11 @@
         : ($post->description ?? '');
     $image = thumb(image($post->image), 600, 400);
     $created_at = $post->created_at ?? '';
-    $description_short = !empty($description) ? cutnchar(strip_tags($description), 120) : '';
+    $description_short = !empty($description) ? cutnchar($description, 120) : '';
 @endphp
 
 <div class="post-item" style="background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease; height: 100%; display: flex; flex-direction: column;">
-    <a href="{{ $canonical }}" title="{{ $name }}" class="image img-cover img-zoomin" style="display: block; position: relative; overflow: hidden; padding-top: 60%;">
+    <a href="{{ $canonical }}" title="{{ $name }}" class="image img-cover img-zoomin" style="display: block; position: relative; overflow: hidden; height: 200px; width: 100%;">
         <div class="skeleton-loading"></div>
         <img class="lazy-image" data-src="{{ $image }}" alt="{{ $name }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
     </a>
@@ -34,7 +34,7 @@
         </h3>
         @if($description_short)
         <div class="description" style="color: #666; font-size: 14px; line-height: 1.6; margin-top: auto; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-            {{ $description_short }}
+            {!! $description_short !!}
         </div>
         @endif
     </div>
