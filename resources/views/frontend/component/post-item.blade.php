@@ -10,7 +10,7 @@
         : ($post->description ?? '');
     $image = thumb(image($post->image), 600, 400);
     $created_at = $post->created_at ?? '';
-    $description_short = !empty($description) ? cutnchar(strip_tags($description), 120) : '';
+    $description_short = !empty($description) ? cutnchar(strip_tags(html_entity_decode($description, ENT_QUOTES, 'UTF-8')), 120) : '';
 @endphp
 
 <div class="post-item" style="background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease; height: 100%; display: flex; flex-direction: column;">
